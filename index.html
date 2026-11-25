@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khu Rừng Nhiệt Đới Việt Nam | Trọn Bộ Lab 1 - Lab 8 CNTT 4.0 - Phó Minh Quốc Knul</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            forest: {
+              950: '#04130c',
+              900: '#072216',
+              800: '#0c3523',
+              700: '#134e34',
+              600: '#196b47',
+              500: '#228b5d',
+              400: '#34d399',
+              300: '#6ee7b7',
+              200: '#a7f3d0',
+              100: '#d1fae5',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Nền khu rừng nhiệt đới Việt Nam xanh thẳm */
+    body {
+      background-color: #04130c;
+      color: #ecfdf5;
+      overflow-x: hidden;
+      transition: background-color 0.6s ease;
+    }
+
+    .jungle-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background-image:
+        linear-gradient(to bottom, rgba(4, 24, 15, 0.62) 0%, rgba(7, 38, 24, 0.52) 45%, rgba(4, 19, 12, 0.94) 100%),
+        url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      transition: filter 0.7s ease;
+    }
+
+    /* Chế độ Rừng đêm đom đóm */
+    body.night-mode .jungle-bg {
+      filter: brightness(0.45) saturate(1.25) hue-rotate(15deg);
+    }
+
+    /* Ánh nắng xuyên tán lá (Sunbeams) */
+    .sunbeams {
+      position: fixed;
+      top: -15%;
+      left: 5%;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, rgba(167, 243, 208, 0.22) 0%, rgba(52, 211, 153, 0.08) 45%, transparent 70%);
+      border-radius: 50%;
+      z-index: -2;
+      pointer-events: none;
+      animation: breatheSun 7s ease-in-out infinite alternate;
+      transition: opacity 0.6s ease;
+    }
+
+    body.night-mode .sunbeams {
+      opacity: 0.15;
+    }
+
+    @keyframes breatheSun {
+      0% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+      100% { transform: scale(1.15) translate(20px, 10px); opacity: 1; }
+    }
+
+    /* Hạt đom đóm / lá rừng bay lơ lửng */
+    .firefly {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: radial-gradient(circle, #fef08a 10%, #a3e635 60%, transparent 100%);
+      box-shadow: 0 0 12px #bef264, 0 0 20px #fef08a;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.45;
+      animation: floatFirefly 12s infinite ease-in-out;
+    }
+
+    body.night-mode .firefly {
+      opacity: 0.95;
+      width: 8px;
+      height: 8px;
+    }
+
+    @keyframes floatFirefly {
+      0%, 100% { transform: translate(0, 0) scale(0.8); }
+      25% { transform: translate(40px, -60px) scale(1.2); }
+      50% { transform: translate(-30px, -110px) scale(0.9); }
+      75% { transform: translate(50px, -40px) scale(1.3); }
+    }
+
+    /* Glassmorphism thẻ rừng xanh */
+    .glass-forest {
+      background: rgba(6, 28, 18, 0.76);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(52, 211, 153, 0.22);
+      box-shadow: 0 12px 32px -6px rgba(0, 0, 0, 0.6);
+    }
+
+    .glass-forest-sub {
+      background: rgba(4, 20, 13, 0.75);
+      border: 1px solid rgba(110, 231, 183, 0.18);
+    }
+
+    /* Tab đang chọn */
+    .nav-active {
+      background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+      color: #022c22 !important;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.35s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Thanh cuộn tinh tế */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #04130c; }
+    ::-webkit-scrollbar-thumb { background: #047857; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #34d399; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-400 selection:text-emerald-950">
+
+  <!-- Nền Rừng Nhiệt Đới & Hiệu Ứng Đom Đóm / Nắng Xuyên Lá -->
+  <div class="jungle-bg"></div>
+  <div class="sunbeams"></div>
+  <div id="fireflies-container"></div>
+
+  <!-- Watermark Bác Hồ trang trọng góc dưới bên phải -->
+  <div class="fixed bottom-0 right-0 z-[-1] pointer-events-none opacity-20 hidden lg:block select-none">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Ho_Chi_Minh_1946.jpg/440px-Ho_Chi_Minh_1946.jpg"
+      alt="Chủ tịch Hồ Chí Minh"
+      onerror="this.style.display='none'"
+      class="w-72 h-auto object-cover rounded-tl-3xl contrast-125 mix-blend-luminosity"
+      style="-webkit-mask-image: linear-gradient(to top left, black 40%, transparent 95%); mask-image: linear-gradient(to top left, black 40%, transparent 95%);"
+    />
+  </div>
+
+  <!-- HEADER CỐ ĐỊNH & THÔNG TIN SINH VIÊN -->
+  <header class="sticky top-0 z-40 glass-forest border-b border-emerald-400/25">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+        <!-- Logo & Tiêu đề -->
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-700 flex items-center justify-center text-emerald-950 shadow-lg shrink-0">
+            <i class="fa-solid fa-tree text-xl"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h1 class="font-serif text-lg sm:text-xl font-bold text-emerald-300 tracking-wide">
+                Khu Rừng Nhiệt Đới Việt Nam
+              </h1>
+              <span class="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                CNTT 4.0 • FPT Polytechnic
+              </span>
+            </div>
+            <p class="text-xs text-emerald-100/80">
+              Hệ sinh thái động vật hoang dã &amp; Cổng giải trọn bộ Lab 1 – Lab 8
+            </p>
+          </div>
+        </div>
+
+        <!-- Thẻ Thông Tin Sinh Viên & Nút Điều Khiển Rừng -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2 bg-emerald-950/85 border border-emerald-400/30 px-3.5 py-1.5 rounded-2xl text-xs">
+            <span><i class="fa-solid fa-user-graduate text-emerald-400 mr-1"></i>SV: <strong class="text-white">Phó Minh Quốc Knul</strong></span>
+            <span class="text-emerald-500/50">|</span>
+            <span><i class="fa-solid fa-id-card text-emerald-400 mr-1"></i>MSSV: <strong class="text-amber-300">PK04952</strong></span>
+            <span class="text-emerald-500/50">|</span>
+            <span><i class="fa-solid fa-chalkboard-user text-emerald-400 mr-1"></i>Lớp: <strong class="text-emerald-300">ITI102-WD22301</strong></span>
+          </div>
+
+          <!-- Nút chuyển Ban ngày / Rừng đêm đom đóm -->
+          <button onclick="toggleForestLight()" id="btn-light-mode" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 text-xs font-semibold transition flex items-center gap-1.5" title="Chuyển ánh sáng rừng">
+            <i class="fa-solid fa-sun text-amber-300"></i> <span>Ban ngày</span>
+          </button>
+
+          <!-- Nút bật/tắt âm thanh rừng (Web Audio API) -->
+          <button onclick="toggleForestAudio()" id="btn-forest-audio" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 text-xs font-semibold transition flex items-center gap-1.5" title="Bật/tắt tiếng chim rừng & suối chảy">
+            <i class="fa-solid fa-volume-xmark text-emerald-300"></i> <span>Âm thanh rừng</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- THANH ĐIỀU HƯỚNG CHÍNH: HỆ SINH THÁI RỪNG + LAB 1 ĐẾN LAB 8 + TÌM KIẾM NHANH -->
+      <div class="mt-3 pt-2.5 border-t border-emerald-400/15 flex flex-col md:flex-row md:items-center justify-between gap-2">
+        <nav class="flex items-center gap-1.5 overflow-x-auto pb-1">
+          <button onclick="switchMainTab('forest')" id="tab-btn-forest" class="main-nav-btn nav-active px-3 py-1.5 rounded-xl text-xs whitespace-nowrap transition flex items-center gap-1.5">
+            <i class="fa-solid fa-paw"></i> Hệ Sinh Thái &amp; Bác Hồ
+          </button>
+          <button onclick="switchMainTab('lab1')" id="tab-btn-lab1" class="main-nav-btn px-3 py-1.5 rounded-xl text-xs text-emerald-100/85 hover:bg-emerald-400/15 whitespace-nowrap transition">Lab 1</button>
+          <button onclick="switchMainTab('lab2')" id="tab-btn-lab2" class="main-nav-btn px-3 py-1.5 rounded-xl text-xs text-emerald-100/85 hover:bg-emerald-400/15 whitespace-nowrap transition">Lab 2</button>
+          <button onclick="switchMainTab('lab3')" id="tab-btn-lab3" class="main-nav-btn px-3 py-1.5 rounded-xl text-xs text-emerald-100/85 hover:bg-emerald-400/15 whitespace-nowrap transition">Lab 3</button>
+          <button onclick="switchMainTab('lab4')" id="tab-btn-lab4" class="main-nav-btn px-3 py-1.5 rounded-xl text-xs text-emerald-100/85 hover:bg-emerald-400/15 whitespace-nowrap transition">Lab 4</button>
+          <button onclick="switchMainTab('lab5')" id="tab-btn-lab5" class="main-nav-btn px-3 py-1.5 rounded-xl text-xs text-emerald-100/85 hover:bg-emerald-400/15 whitespace-nowrap transition">Lab 5</button>
+          <button onclick="switchMainTab('lab6')" id="tab-btn-lab6" class="main-nav-btn px-3 py-1.5 rounded-xl text-xs text-emerald-100/85 hover:bg-emerald-400/15 whitespace-nowrap transition">Lab 6</button>
+          <button onclick="switchMainTab('lab7')" id="tab-btn-lab7" class="main-nav-btn px-3 py-1.5 rounded-xl text-xs text-emerald-100/85 hover:bg-emerald-400/15 whitespace-nowrap transition">Lab 7 (AI App)</button>
+          <button onclick="switchMainTab('lab8')" id="tab-btn-lab8" class="main-nav-btn px-3 py-1.5 rounded-xl text-xs text-emerald-100/85 hover:bg-emerald-400/15 whitespace-nowrap transition">Lab 8</button>
+        </nav>
+
+        <!-- Ô tìm kiếm nhanh bài tập Lab 1-8 -->
+        <div class="relative w-full md:w-64 shrink-0">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-emerald-400/70 text-xs"></i>
+          <input type="text" id="global-lab-search" oninput="handleQuickSearch(this.value)" placeholder="Tìm nhanh bài Lab (VD: SSD, IP, Deepfake)..." class="w-full bg-black/40 border border-emerald-400/30 rounded-xl pl-8 pr-3 py-1.5 text-xs text-emerald-100 placeholder-emerald-200/40 focus:outline-none focus:border-emerald-400" />
+          <div id="quick-search-results" class="hidden absolute right-0 mt-1.5 w-80 bg-emerald-950 border border-emerald-400/40 rounded-2xl shadow-2xl p-2 z-50 space-y-1 max-h-64 overflow-y-auto"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NỘI DUNG CHÍNH -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- ========================================================================= -->
+    <!-- MỤC 0: KHÁM PHÁ HỆ SINH THÁI RỪNG NHIỆT ĐỚI VIỆT NAM & CHÂN DUNG BÁC HỒ   -->
+    <!-- ========================================================================= -->
+    <section id="section-forest" class="main-section fade-in space-y-6">
+      
+      <!-- Hero Banner Rừng Nguyên Sinh & Chân dung Bác Hồ -->
+      <div class="glass-forest rounded-3xl p-6 sm:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-7 space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold">
+              <i class="fa-solid fa-leaf text-lime-400"></i>
+              <span>Vườn Quốc Gia Cúc Phương • Cát Tiên • Bảo Tồn Thiên Nhiên Việt Nam</span>
+            </div>
+
+            <h2 class="font-serif text-2xl sm:text-4xl font-bold text-emerald-200 leading-tight">
+              Sức Sống Đại Ngàn Nhiệt Đới &amp; Hành Trình Chinh Phục Tri Thức Số 4.0
+            </h2>
+
+            <p class="text-sm sm:text-base text-emerald-100/90 leading-relaxed">
+              Giữa những tán cổ thụ ngàn năm của rừng nguyên sinh Việt Nam – nơi tiếng chim hồng hoàng vang vọng cùng bước chân của loài sao la quý hiếm – thiên nhiên luôn vận hành như một hệ sinh thái thông minh và bền vững. Lấy cảm hứng từ đó, sinh viên <strong class="text-amber-300">Phó Minh Quốc Knul (PK04952)</strong> xây dựng cổng thực hành trọn bộ <strong class="text-emerald-300">8 bài Lab CNTT 4.0</strong> kết hợp công nghệ AI hiện đại.
+            </p>
+
+            <!-- Lời dạy của Bác Hồ về trồng cây, bảo vệ rừng -->
+            <blockquote class="p-4 rounded-2xl bg-emerald-950/80 border-l-4 border-amber-400 italic text-amber-100 text-sm">
+              “Vì lợi ích mười năm thì phải trồng cây, vì lợi ích trăm năm thì phải trồng người. Rừng là vàng, nếu mình biết bảo vệ, xây dựng thì rừng rất quý.”
+              <footer class="not-italic font-semibold text-amber-300 mt-1 text-xs">— Chủ tịch Hồ Chí Minh (Phát động Tết Trồng Cây)</footer>
+            </blockquote>
+
+            <!-- Nút điều hướng nhanh tới 8 Lab -->
+            <div class="flex flex-wrap gap-2.5 pt-1">
+              <button onclick="switchMainTab('lab1')" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-300 hover:to-teal-400 text-emerald-950 font-bold text-xs sm:text-sm shadow-lg transition flex items-center gap-2">
+                <i class="fa-solid fa-book-open"></i> Bắt đầu xem từ Lab 1
+              </button>
+              <button onclick="switchMainTab('lab7')" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold text-xs sm:text-sm shadow-lg transition flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Trải nghiệm App Ghi Chú AI (Lab 7)
+              </button>
+              <button onclick="toggleForestAudio()" class="px-4 py-2.5 rounded-2xl glass-forest-sub hover:bg-emerald-400/20 text-emerald-200 text-xs sm:text-sm font-semibold transition flex items-center gap-2">
+                <i class="fa-solid fa-music text-emerald-400"></i> Nghe tiếng rừng tự nhiên
+              </button>
+            </div>
+          </div>
+
+          <!-- Khung ảnh Bác Hồ trang trọng & Hồ sơ Sinh viên -->
+          <div class="lg:col-span-5 flex flex-col items-center">
+            <div class="relative w-full max-w-sm">
+              <div class="absolute -inset-1 bg-gradient-to-r from-emerald-400 via-amber-400 to-teal-400 rounded-3xl blur opacity-35"></div>
+              <div class="relative glass-forest rounded-3xl p-4 space-y-3">
+                <div class="relative rounded-2xl overflow-hidden border-2 border-amber-400/50 shadow-xl aspect-[4/3] bg-emerald-950">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Ho_Chi_Minh_1946.jpg/640px-Ho_Chi_Minh_1946.jpg"
+                    alt="Chân dung Chủ tịch Hồ Chí Minh"
+                    onerror="this.onerror=null; this.src='https://placehold.co/600x450/064e3b/fef3c7?text=Chu+Tich+Ho+Chi+Minh';"
+                    class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-transparent to-transparent"></div>
+                  <div class="absolute bottom-3 left-3 right-3">
+                    <span class="px-2 py-0.5 rounded bg-red-700/90 text-amber-200 text-[10px] font-bold uppercase">Đời đời nhớ ơn Bác</span>
+                    <p class="font-serif text-base font-bold text-amber-200 mt-0.5">Chủ Tịch Hồ Chí Minh (1890 - 1969)</p>
+                  </div>
+                </div>
+
+                <div class="bg-emerald-950/90 rounded-2xl p-3.5 border border-emerald-400/25 space-y-1.5 text-xs">
+                  <div class="flex justify-between border-b border-emerald-400/15 pb-1">
+                    <span class="text-emerald-200/70">Họ và tên sinh viên:</span>
+                    <strong class="text-white">Phó Minh Quốc Knul</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-emerald-400/15 pb-1">
+                    <span class="text-emerald-200/70">Mã số sinh viên:</span>
+                    <strong class="text-amber-300">PK04952</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-emerald-400/15 pb-1">
+                    <span class="text-emerald-200/70">Lớp học phần:</span>
+                    <strong class="text-emerald-300">ITI102-WD22301</strong>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-emerald-200/70">Môn học &amp; Trường:</span>
+                    <strong class="text-teal-300">CNTT 4.0 - FPT Polytechnic</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KHU VỰC TƯƠNG TÁC: KHÁM PHÁ HỆ SINH THÁI RỪNG & ĐỘNG VẬT HOANG DÃ -->
+      <div class="glass-forest rounded-3xl p-6 space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-400/20 pb-4">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-lime-500/20 text-lime-300 text-xs font-bold">TƯƠNG TÁC HỆ SINH THÁI RỪNG VIỆT NAM</span>
+            <h3 class="font-serif text-2xl font-bold text-emerald-200 mt-1">Các Loài Động Vật Quý Hiếm Trong Rừng Nguyên Sinh</h3>
+            <p class="text-xs sm:text-sm text-emerald-100/80">Lọc theo tầng sinh thái của khu rừng và bấm vào từng loài để nghe tiếng kêu mô phỏng &amp; xem tập tính!</p>
+          </div>
+
+          <!-- Bộ lọc theo tầng rừng -->
+          <div class="flex flex-wrap gap-2">
+            <button onclick="filterAnimals('ALL')" id="ani-btn-ALL" class="ani-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-400 text-emerald-950 shadow">
+              Tất cả tầng rừng (6)
+            </button>
+            <button onclick="filterAnimals('canopy')" id="ani-btn-canopy" class="ani-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-950/80 text-emerald-200 border border-emerald-400/30 hover:bg-emerald-800/60">
+              <i class="fa-solid fa-feather mr-1"></i> Tầng tán cao
+            </button>
+            <button onclick="filterAnimals('understory')" id="ani-filter-understory" class="ani-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-950/80 text-emerald-200 border border-emerald-400/30 hover:bg-emerald-800/60">
+              <i class="fa-solid fa-tree mr-1"></i> Tầng dưới tán
+            </button>
+            <button onclick="filterAnimals('floor')" id="ani-btn-floor" class="ani-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-950/80 text-emerald-200 border border-emerald-400/30 hover:bg-emerald-800/60">
+              <i class="fa-solid fa-paw mr-1"></i> Mặt đất rừng
+            </button>
+          </div>
+        </div>
+
+        <!-- Lưới thẻ động vật rừng (Render bằng JS) -->
+        <div id="animals-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- CỔNG LIÊN KẾT THỰC TẾ ĐẾN CÁC CÔNG CỤ HỌC TẬP LAB 1 - LAB 8 -->
+      <div class="glass-forest rounded-3xl p-6 space-y-4">
+        <h3 class="font-serif text-xl font-bold text-emerald-300 flex items-center gap-2">
+          <i class="fa-solid fa-compass text-amber-400"></i> Cổng Liên Kết Công Cụ Thực Hành Lab 1 – Lab 8 (Nhấn Mở Trực Tiếp)
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+          <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-2xl glass-forest-sub hover:bg-emerald-800/60 transition text-center space-y-1.5 group">
+            <i class="fa-solid fa-microchip text-purple-400 text-xl group-hover:scale-110 transition-transform"></i>
+            <div class="text-xs font-bold text-white">Google AI Studio</div>
+            <div class="text-[10px] text-emerald-300/70">Lab 1 &amp; Lab 7</div>
+          </a>
+          <a href="https://notebooklm.google.com/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-2xl glass-forest-sub hover:bg-emerald-800/60 transition text-center space-y-1.5 group">
+            <i class="fa-solid fa-book-sparkles text-blue-400 text-xl group-hover:scale-110 transition-transform"></i>
+            <div class="text-xs font-bold text-white">NotebookLM</div>
+            <div class="text-[10px] text-emerald-300/70">Trợ lý tài liệu</div>
+          </a>
+          <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-2xl glass-forest-sub hover:bg-emerald-800/60 transition text-center space-y-1.5 group">
+            <i class="fa-solid fa-code text-sky-400 text-xl group-hover:scale-110 transition-transform"></i>
+            <div class="text-xs font-bold text-white">VS Code</div>
+            <div class="text-[10px] text-emerald-300/70">Lab 4 &amp; Lab 6</div>
+          </a>
+          <a href="https://app.diagrams.net/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-2xl glass-forest-sub hover:bg-emerald-800/60 transition text-center space-y-1.5 group">
+            <i class="fa-solid fa-diagram-project text-orange-400 text-xl group-hover:scale-110 transition-transform"></i>
+            <div class="text-xs font-bold text-white">Draw.io</div>
+            <div class="text-[10px] text-emerald-300/70">Phác thảo Lab 6</div>
+          </a>
+          <a href="https://apps.microsoft.com/detail/9nftch6j7fhv?hl=vi-VN&gl=VN" target="_blank" rel="noopener noreferrer" class="p-3 rounded-2xl glass-forest-sub hover:bg-emerald-800/60 transition text-center space-y-1.5 group">
+            <i class="fa-solid fa-robot text-cyan-400 text-xl group-hover:scale-110 transition-transform"></i>
+            <div class="text-xs font-bold text-white">Power Automate</div>
+            <div class="text-[10px] text-emerald-300/70">RPA Lab 6</div>
+          </a>
+          <a href="https://vnnic.vn/whois-information" target="_blank" rel="noopener noreferrer" class="p-3 rounded-2xl glass-forest-sub hover:bg-emerald-800/60 transition text-center space-y-1.5 group">
+            <i class="fa-solid fa-globe text-emerald-400 text-xl group-hover:scale-110 transition-transform"></i>
+            <div class="text-xs font-bold text-white">VNNIC Whois</div>
+            <div class="text-[10px] text-emerald-300/70">Tên miền Lab 5</div>
+          </a>
+          <a href="https://caodang.fpt.edu.vn/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-2xl glass-forest-sub hover:bg-emerald-800/60 transition text-center space-y-1.5 group">
+            <i class="fa-solid fa-graduation-cap text-amber-400 text-xl group-hover:scale-110 transition-transform"></i>
+            <div class="text-xs font-bold text-white">FPT Polytechnic</div>
+            <div class="text-[10px] text-emerald-300/70">Cổng LMS</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Bảng Mục Lục Nhanh 8 Bài Lab -->
+      <div class="glass-forest rounded-3xl p-6 space-y-4">
+        <h3 class="font-serif text-xl font-bold text-emerald-300 flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-emerald-400"></i> Bản Đồ Trọn Bộ 8 Bài Thực Hành (Lab 1 – Lab 8)
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="lab-overview-cards"></div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LAB 1: TÌM HIỂU VỀ CÔNG NGHỆ THÔNG TIN 4.0                                -->
+    <!-- ========================================================================= -->
+    <section id="section-lab1" class="main-section hidden fade-in space-y-6">
+      <div class="glass-forest rounded-3xl p-6 space-y-6">
+        <div class="border-b border-emerald-400/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">LAB 1 • 10 ĐIỂM</span>
+            <h2 class="font-serif text-2xl font-bold text-white mt-1">Tìm Hiểu Về Công Nghệ Thông Tin 4.0</h2>
+            <p class="text-xs text-emerald-200/80">Sinh viên thực hiện: Phó Minh Quốc Knul (PK04952) – Lớp ITI102-WD22301</p>
+          </div>
+          <button onclick="switchMainTab('lab2')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs self-start sm:self-center">
+            Sang Lab 2 <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+
+        <!-- Bài 1 (2 điểm) -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-4">
+          <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 1 (2 điểm): Tìm hiểu một công nghệ 4.0 — Trí tuệ nhân tạo (AI)</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-emerald-900/70 text-emerald-200 border-b border-emerald-400/30">
+                  <th class="p-3 w-1/4">Nội dung</th>
+                  <th class="p-3">Thông tin chi tiết</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-emerald-400/15">
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Tên công nghệ</td>
+                  <td class="p-3 font-bold text-white">Trí tuệ nhân tạo (Artificial Intelligence – AI)</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Khái niệm</td>
+                  <td class="p-3 text-emerald-100/90">Là lĩnh vực khoa học máy tính tập trung vào việc xây dựng các hệ thống, phần mềm có khả năng mô phỏng trí thông minh của con người như: học tập (Machine Learning), suy luận, nhận diện hình ảnh/giọng nói, xử lý ngôn ngữ tự nhiên và sáng tạo nội dung (Generative AI).</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Ví dụ ứng dụng</td>
+                  <td class="p-3 text-emerald-100/90">Trợ lý ảo (Google Gemini, ChatGPT), xe tự hành, nhận diện khuôn mặt FaceID, hệ thống gợi ý phim/sản phẩm, chẩn đoán hình ảnh y khoa.</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Lĩnh vực sử dụng</td>
+                  <td class="p-3 text-emerald-100/90">Giáo dục, Y tế, Tài chính – Ngân hàng, Giao thông vận tải, Thương mại điện tử, Nông nghiệp thông minh và Bảo tồn thiên nhiên (camera AI nhận diện động vật hoang dã).</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Ví dụ tại Việt Nam</td>
+                  <td class="p-3 text-emerald-100/90">
+                    • <strong>VinAI:</strong> Nghiên cứu thị giác máy tính và công nghệ giám sát người lái thông minh trên ô tô điện VinFast.<br>
+                    • <strong>FPT.AI:</strong> Nền tảng tổng đài ảo thông minh, nhận diện ký tự quang học (OCR) và định danh khách hàng điện tử (eKYC).<br>
+                    • <strong>Zalo AI (Kiki):</strong> Trợ lý giọng nói tiếng Việt tích hợp trên ô tô và loa thông minh.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="bg-black/30 rounded-xl p-4 space-y-2 text-xs sm:text-sm border border-emerald-400/20">
+            <p><strong class="text-amber-300">1. Công nghệ này giải quyết vấn đề gì trong thực tế?</strong><br>
+            AI giúp tự động hóa các tác vụ lặp đi lặp lại, xử lý khối lượng dữ liệu khổng lồ với tốc độ vượt trội con người, giảm thiểu sai sót trong y tế/sản xuất, cá nhân hóa lộ trình học tập cho từng sinh viên và hỗ trợ ra quyết định chính xác theo thời gian thực.</p>
+            <p><strong class="text-amber-300">2. Theo bạn công nghệ này sẽ phát triển mạnh trong tương lai không? Vì sao?</strong><br>
+            Chắc chắn AI sẽ phát triển bùng nổ mạnh mẽ hơn nữa. Vì nhu cầu tối ưu năng suất lao động của mọi ngành nghề đều tăng cao, hạ tầng chip tính toán (GPU/NPU) ngày càng mạnh, dữ liệu số ngày càng dồi dào và các mô hình AI đa phương thức (Multimodal AI) ngày càng dễ tiếp cận với chi phí thấp.</p>
+          </div>
+        </div>
+
+        <!-- Bài 2 (2 điểm) -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+          <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 2 (2 điểm): Quan sát công nghệ 4.0 trong đời sống hằng ngày</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-emerald-900/70 text-emerald-200 border-b border-emerald-400/30">
+                  <th class="p-3">Lĩnh vực</th>
+                  <th class="p-3">Ví dụ công nghệ thực tế tại Việt Nam</th>
+                  <th class="p-3">Công nghệ 4.0 sử dụng</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-emerald-400/15">
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Thanh toán</td>
+                  <td class="p-3">Ví điện tử MoMo, VNPay QR, VietQR ngân hàng số</td>
+                  <td class="p-3">Cloud Computing, Mobile App, AI chống gian lận, Sinh trắc học khuôn mặt (eKYC)</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Mua sắm</td>
+                  <td class="p-3">Shopee, TikTok Shop, Tiki</td>
+                  <td class="p-3">AI &amp; Machine Learning (gợi ý sản phẩm theo hành vi), Big Data phân tích xu hướng mua sắm</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Giao thông</td>
+                  <td class="p-3">Google Maps, Xanh SM, Grab</td>
+                  <td class="p-3">Big Data &amp; GPS thời gian thực (cảnh báo kẹt xe), AI tối ưu hóa lộ trình đặt xe</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold text-amber-300">Y tế &amp; Giáo dục</td>
+                  <td class="p-3">Sổ sức khỏe điện tử VNeID, hệ thống học tập FPT Polytechnic LMS</td>
+                  <td class="p-3">Cloud Computing, Big Data quản lý hồ sơ số tập trung</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bài 3 (2 điểm) -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+          <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 3 (2 điểm): So sánh hai công nghệ 4.0 (AI và IoT)</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-emerald-900/70 text-emerald-200 border-b border-emerald-400/30">
+                  <th class="p-3 w-1/5">Tiêu chí</th>
+                  <th class="p-3 w-2/5 text-amber-300">Công nghệ A: Trí tuệ nhân tạo (AI)</th>
+                  <th class="p-3 w-2/5 text-emerald-300">Công nghệ B: Internet vạn vật (IoT)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-emerald-400/15">
+                <tr>
+                  <td class="p-3 font-semibold">Mục đích</td>
+                  <td class="p-3">Phân tích dữ liệu, học hỏi quy luật, suy luận và đưa ra quyết định thông minh như bộ não con người.</td>
+                  <td class="p-3">Kết nối các thiết bị vật lý qua Internet để thu thập dữ liệu từ cảm biến và điều khiển từ xa (đóng vai trò giác quan).</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold">Ví dụ ứng dụng</td>
+                  <td class="p-3">Chatbot tư vấn khách hàng, nhận diện giọng nói, tạo sinh mã nguồn lập trình.</td>
+                  <td class="p-3">Nhà thông minh (Smart Home), đồng hồ đo nhịp tim thông minh, bẫy ảnh tự động trong rừng Cúc Phương.</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-semibold">Lĩnh vực sử dụng</td>
+                  <td class="p-3">Phần mềm, Tài chính, Y tế, Giáo dục, Sáng tạo nội dung.</td>
+                  <td class="p-3">Nông nghiệp công nghệ cao, Công nghiệp sản xuất, Đô thị thông minh, Giám sát môi trường rừng.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="bg-black/30 rounded-xl p-3.5 text-xs sm:text-sm border border-emerald-400/20">
+            <strong class="text-amber-300">Câu hỏi: Theo bạn công nghệ nào có ảnh hưởng lớn hơn trong tương lai?</strong><br>
+            Theo em, <strong>AI có sức ảnh hưởng trực tiếp và sâu rộng hơn</strong> vì AI là “bộ não” quyết định giá trị của mọi hệ thống công nghệ. Khi kết hợp với IoT (tạo thành AIoT), IoT giúp thu thập dữ liệu ngoài đời thực còn AI biến dữ liệu đó thành hành động thông minh.
+          </div>
+        </div>
+
+        <!-- Bài 4 (2 điểm) & Bài 5 (2 điểm) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div class="lg:col-span-8 glass-forest-sub rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 4 (2 điểm): Nghề CNTT trong thời đại 4.0</h3>
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <tbody class="divide-y divide-emerald-400/15">
+                <tr>
+                  <td class="p-2.5 font-semibold text-amber-300 w-1/3">Tên nghề</td>
+                  <td class="p-2.5 font-bold text-white">Lập trình viên Phát triển Web &amp; Tích hợp AI (AI Web Developer)</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-semibold text-amber-300">Công việc chính</td>
+                  <td class="p-2.5">Thiết kế giao diện người dùng (UI/UX), xây dựng ứng dụng web tương tác, kết nối API trí tuệ nhân tạo và tối ưu hiệu năng hệ thống.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-semibold text-amber-300">Kỹ năng cần có</td>
+                  <td class="p-2.5">Tư duy lập trình, thiết kế Responsive, kỹ năng viết Prompt AI, làm việc nhóm Agile/Scrum và tiếng Anh chuyên ngành.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-semibold text-amber-300">Công nghệ sử dụng</td>
+                  <td class="p-2.5">HTML5, CSS3, Tailwind CSS, JavaScript, React/Next.js, Node.js, Git/GitHub, Gemini API.</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="bg-black/30 rounded-xl p-3.5 text-xs space-y-1.5 border border-emerald-400/20">
+              <p><strong class="text-amber-300">1. Bạn có muốn làm nghề này không? Vì sao?</strong> Em rất muốn theo đuổi nghề này vì em đang học chuyên ngành Web tại lớp <strong>ITI102-WD22301</strong>. Nghề này cho phép em tự tay biến ý tưởng thành sản phẩm trực quan phục vụ cộng đồng.</p>
+              <p><strong class="text-amber-300">2. Bạn cần học những kỹ năng gì để theo nghề này?</strong> Cần nắm vững nền tảng HTML/CSS/JS, thành thạo ít nhất 1 framework hiện đại, biết sử dụng công cụ AI hỗ trợ lập trình và rèn luyện kỹ năng giải quyết vấn đề thực tế.</p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 glass-forest-sub rounded-2xl p-5 space-y-3">
+            <span class="px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[11px] font-bold">BÀI 5 MỞ RỘNG (2 ĐIỂM)</span>
+            <h3 class="font-bold text-base text-emerald-300">Xu Hướng AI Agent &amp; Edge AI Năm 2026</h3>
+            <p class="text-xs text-emerald-100/90 leading-relaxed">
+              <strong>1. AI Agent (Tác tử AI tự chủ):</strong> Không chỉ trả lời câu hỏi, AI năm 2026 có thể tự lập kế hoạch, thao tác trình duyệt, quản lý file và hoàn thành chuỗi công việc phức tạp thay con người.
+            </p>
+            <p class="text-xs text-emerald-100/90 leading-relaxed">
+              <strong>2. Edge AI (AI tại biên):</strong> Chạy mô hình AI trực tiếp trên chip NPU của laptop và điện thoại mà không cần gửi dữ liệu lên đám mây, giúp bảo mật tuyệt đối và phản hồi tức thì (áp dụng trong camera giám sát động vật rừng không có sóng Internet).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LAB 2: TÌM HIỂU VỀ THIẾT BỊ MÁY TÍNH                                      -->
+    <!-- ========================================================================= -->
+    <section id="section-lab2" class="main-section hidden fade-in space-y-6">
+      <div class="glass-forest rounded-3xl p-6 space-y-6">
+        <div class="border-b border-emerald-400/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">LAB 2 • 10 ĐIỂM</span>
+            <h2 class="font-serif text-2xl font-bold text-white mt-1">Tìm Hiểu Về Thiết Bị Phần Cứng Máy Tính</h2>
+            <p class="text-xs text-emerald-200/80">Nhận diện linh kiện Desktop PC, chọn Laptop cho sinh viên CNTT &amp; So sánh HDD vs SSD</p>
+          </div>
+          <button onclick="switchMainTab('lab3')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs self-start sm:self-center">
+            Sang Lab 3 <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+
+        <!-- Bài 1 (2 điểm): Desktop PC -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 1 (2 điểm): Nhận diện thành phần phần cứng máy tính để bàn (Desktop PC)</h3>
+            <a href="https://gearvn.com/collections/pc-gvn" target="_blank" rel="noopener noreferrer" class="text-xs px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/30 inline-flex items-center gap-1.5">
+              <i class="fa-solid fa-link"></i> Link tham khảo GearVN PC
+            </a>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-emerald-900/70 text-emerald-200 border-b border-emerald-400/30">
+                  <th class="p-3 w-1/5">Thiết bị</th>
+                  <th class="p-3 w-2/5">Thông tin thiết bị mẫu</th>
+                  <th class="p-3 w-2/5">Chức năng chính</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-emerald-400/15">
+                <tr><td class="p-2.5 font-semibold text-amber-300">CPU</td><td class="p-2.5">Intel Core i5-14400F (10 nhân, 16 luồng, tối đa 4.7GHz)</td><td class="p-2.5">Bộ xử lý trung tâm, thực hiện các phép tính toán học, logic và điều khiển mọi hoạt động của máy tính.</td></tr>
+                <tr><td class="p-2.5 font-semibold text-amber-300">RAM</td><td class="p-2.5">16GB DDR4 Bus 3200MHz (2x8GB Dual Channel)</td><td class="p-2.5">Bộ nhớ truy cập ngẫu nhiên tạm thời, lưu dữ liệu các chương trình đang chạy để CPU truy xuất cực nhanh.</td></tr>
+                <tr><td class="p-2.5 font-semibold text-amber-300">Ổ cứng (SSD)</td><td class="p-2.5">SSD 512GB NVMe PCIe Gen 4.0</td><td class="p-2.5">Lưu trữ hệ điều hành, phần mềm và dữ liệu cá nhân lâu dài ngay cả khi tắt nguồn điện.</td></tr>
+                <tr><td class="p-2.5 font-semibold text-amber-300">Mainboard</td><td class="p-2.5">ASUS PRIME B760M-K D4</td><td class="p-2.5">Bo mạch chủ kết nối và truyền tải dữ liệu, điện năng giữa CPU, RAM, ổ cứng và các thiết bị ngoại vi.</td></tr>
+                <tr><td class="p-2.5 font-semibold text-amber-300">Màn hình</td><td class="p-2.5">LG UltraGear 24 inch Full HD IPS 100Hz</td><td class="p-2.5">Thiết bị xuất (Output), hiển thị giao diện đồ họa, mã nguồn và hình ảnh cho người dùng quan sát.</td></tr>
+                <tr><td class="p-2.5 font-semibold text-amber-300">Bàn phím</td><td class="p-2.5">Bàn phím cơ DareU EK87 (Brown Switch)</td><td class="p-2.5">Thiết bị nhập (Input), dùng để gõ văn bản, viết code và nhập lệnh điều khiển máy tính.</td></tr>
+                <tr><td class="p-2.5 font-semibold text-amber-300">Chuột</td><td class="p-2.5">Logitech G102 Lightsync (8000 DPI)</td><td class="p-2.5">Thiết bị nhập (Input), điều khiển con trỏ chuột trên màn hình để chọn, kéo thả và thao tác giao diện.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="bg-black/30 rounded-xl p-3.5 text-xs sm:text-sm space-y-1 border border-emerald-400/20">
+            <p><strong class="text-amber-300">1. Thành phần nào được gọi là bộ não của máy tính?</strong> → <strong>CPU (Central Processing Unit)</strong>.</p>
+            <p><strong class="text-amber-300">2. Thành phần nào dùng để lưu dữ liệu lâu dài?</strong> → <strong>Ổ cứng (SSD hoặc HDD)</strong>.</p>
+            <p><strong class="text-amber-300">3. Thiết bị nào dùng để nhập dữ liệu?</strong> → <strong>Bàn phím, chuột</strong> (ngoài ra còn có micro, webcam, máy quét).</p>
+          </div>
+        </div>
+
+        <!-- Bài 2 (3 điểm) & Bài 3 (3 điểm) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <!-- Bài 2: Laptop sinh viên CNTT -->
+          <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="font-bold text-base text-emerald-300">Bài 2 (3 điểm): Lựa chọn Laptop cho sinh viên CNTT</h3>
+              <a href="https://phongvu.vn/c/laptop" target="_blank" rel="noopener noreferrer" class="text-xs text-amber-300 underline">Link Phong Vũ</a>
+            </div>
+            <table class="w-full text-left border-collapse text-xs">
+              <tbody class="divide-y divide-emerald-400/15">
+                <tr><td class="p-2 font-semibold text-amber-300 w-1/3">Hãng &amp; Dòng máy</td><td class="p-2 font-bold text-white">Lenovo IdeaPad Slim 5 14IAH8 / ASUS Vivobook 15</td></tr>
+                <tr><td class="p-2 font-semibold text-amber-300">CPU</td><td class="p-2">Intel Core i5-12450H / Core i5-13500H (Hiệu năng cao)</td></tr>
+                <tr><td class="p-2 font-semibold text-amber-300">RAM</td><td class="p-2">16GB LPDDR5 4800MHz</td></tr>
+                <tr><td class="p-2 font-semibold text-amber-300">Ổ lưu trữ</td><td class="p-2">512GB SSD M.2 NVMe PCIe 4.0</td></tr>
+                <tr><td class="p-2 font-semibold text-amber-300">Màn hình</td><td class="p-2">14 inch Full HD+ IPS (1920x1200), chống chói</td></tr>
+                <tr><td class="p-2 font-semibold text-amber-300">Giá tham khảo</td><td class="p-2 font-bold text-emerald-300">~ 16.490.000 VNĐ</td></tr>
+              </tbody>
+            </table>
+            <div class="bg-black/30 rounded-xl p-3 text-xs space-y-1.5 border border-emerald-400/20">
+              <p><strong class="text-amber-300">1. Tại sao chọn laptop này?</strong> Thiết kế mỏng nhẹ (~1.46kg) dễ mang đi học ở FPT Polytechnic, chip dòng H mạnh mẽ, màn hình tỉ lệ 16:10 hiển thị được nhiều dòng code hơn.</p>
+              <p><strong class="text-amber-300">2. RAM &amp; SSD có đủ học lập trình không?</strong> 16GB RAM và 512GB SSD hoàn toàn dư sức chạy mượt VS Code, Docker, trình duyệt nhiều tab và máy ảo cơ bản.</p>
+              <p><strong class="text-amber-300">3. Phù hợp công việc gì?</strong> Lập trình Web, Mobile App, thiết kế UI/UX trên Figma, chạy các công cụ AI và làm việc văn phòng.</p>
+              <p><strong class="text-amber-300">4. Có thêm 5 triệu đồng sẽ nâng cấp gì?</strong> Nâng cấp ổ cứng lên <strong>SSD 1TB NVMe</strong> (~2 triệu) để thoải mái lưu máy ảo/dự án và nâng <strong>RAM lên 32GB</strong> (hoặc mua thêm màn hình rời 24 inch cắm ở nhà để code đa nhiệm).</p>
+            </div>
+          </div>
+
+          <!-- Bài 3: So sánh HDD và SSD -->
+          <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-base text-emerald-300">Bài 3 (3 điểm): So sánh ổ cứng HDD và SSD</h3>
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-emerald-900/70 text-emerald-200 border-b border-emerald-400/30">
+                  <th class="p-2">Tiêu chí</th>
+                  <th class="p-2 text-amber-300">HDD</th>
+                  <th class="p-2 text-emerald-300">SSD</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-emerald-400/15">
+                <tr><td class="p-2 font-semibold">Công nghệ lưu trữ</td><td class="p-2">Đĩa từ quay cơ học &amp; đầu đọc từ tính</td><td class="p-2">Chip nhớ bán dẫn Flash (NAND), không bộ phận chuyển động</td></tr>
+                <tr><td class="p-2 font-semibold">Tốc độ đọc/ghi</td><td class="p-2">Chậm (khoảng 80 – 160 MB/s)</td><td class="p-2">Rất nhanh (500 MB/s với SATA đến 7000 MB/s với NVMe)</td></tr>
+                <tr><td class="p-2 font-semibold">Giá thành</td><td class="p-2">Rẻ trên mỗi GB lưu trữ</td><td class="p-2">Cao hơn HDD trên cùng mức dung lượng</td></tr>
+                <tr><td class="p-2 font-semibold">Độ bền</td><td class="p-2">Dễ hỏng hóc nếu bị va đập, rung lắc mạnh</td><td class="p-2">Chống sốc cực tốt, hoạt động êm ái, không tiếng ồn</td></tr>
+                <tr><td class="p-2 font-semibold">Ví dụ thiết bị</td><td class="p-2">WD Blue 1TB 3.5", Seagate Barracuda 2TB</td><td class="p-2">Samsung 980 PRO 512GB NVMe, Kingston NV2 1TB</td></tr>
+              </tbody>
+            </table>
+            <div class="bg-black/30 rounded-xl p-3 text-xs space-y-1.5 border border-emerald-400/20">
+              <p><strong class="text-amber-300">1. Tại sao laptop hiện nay dùng SSD thay HDD?</strong> SSD giúp khởi động Windows chỉ trong 5–10 giây, mở phần mềm lập trình tức thì, tiết kiệm pin hơn, mỏng nhẹ và không sợ hỏng dữ liệu khi di chuyển.</p>
+              <p><strong class="text-amber-300">2. Khi nào HDD vẫn là lựa chọn tốt?</strong> Khi cần lưu trữ dữ liệu dung lượng cực lớn (4TB – 20TB) với chi phí tiết kiệm như: máy chủ lưu trữ (NAS), hệ thống camera an ninh, hoặc kho sao lưu phim/ảnh lâu dài.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bài 4 (2 điểm): Công cụ tương tác Tư vấn cấu hình PC sinh viên -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-3 border border-amber-400/30">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h3 class="font-bold text-base text-amber-300"><i class="fa-solid fa-sliders mr-1.5"></i>Bài 4 Mở Rộng (2 điểm): Công Cụ Kiểm Tra &amp; Tư Vấn Cấu Hình Máy Tính Sinh Viên</h3>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-200">Tương tác trực tiếp</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+            <div>
+              <label class="block text-xs text-emerald-200/80 mb-1">Chuyên ngành học</label>
+              <select id="pc-major" class="w-full bg-emerald-950 border border-emerald-400/30 rounded-xl px-3 py-2 text-xs text-white">
+                <option value="web">Thiết kế Web / Lập trình (ITI102)</option>
+                <option value="ai">Trí tuệ nhân tạo / Data Science</option>
+                <option value="design">Thiết kế Đồ họa / Dựng phim 3D</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-emerald-200/80 mb-1">Dung lượng RAM hiện có</label>
+              <select id="pc-ram" class="w-full bg-emerald-950 border border-emerald-400/30 rounded-xl px-3 py-2 text-xs text-white">
+                <option value="8">8 GB RAM</option>
+                <option value="16" selected>16 GB RAM</option>
+                <option value="32">32 GB RAM</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-emerald-200/80 mb-1">Loại ổ cứng chính</label>
+              <select id="pc-disk" class="w-full bg-emerald-950 border border-emerald-400/30 rounded-xl px-3 py-2 text-xs text-white">
+                <option value="hdd">Chỉ có HDD</option>
+                <option value="ssd256">SSD 256GB</option>
+                <option value="ssd512" selected>SSD 512GB NVMe</option>
+              </select>
+            </div>
+            <button onclick="evaluatePCConfig()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs transition">
+              Đánh giá cấu hình ngay
+            </button>
+          </div>
+          <div id="pc-eval-result" class="bg-black/35 rounded-xl p-3 text-xs text-emerald-100 border border-emerald-400/20">
+            <strong>Kết quả đánh giá mẫu:</strong> Cấu hình <strong>16GB RAM + SSD 512GB NVMe</strong> đạt mức <strong>Rất Tốt (9/10)</strong> cho chuyên ngành Thiết kế Web &amp; Lập trình tại FPT Polytechnic!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LAB 3: TÌM HIỂU VỀ HỆ ĐIỀU HÀNH CỦA MÁY TÍNH                              -->
+    <!-- ========================================================================= -->
+    <section id="section-lab3" class="main-section hidden fade-in space-y-6">
+      <div class="glass-forest rounded-3xl p-6 space-y-6">
+        <div class="border-b border-emerald-400/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">LAB 3 • 10 ĐIỂM</span>
+            <h2 class="font-serif text-2xl font-bold text-white mt-1">Tìm Hiểu Về Hệ Điều Hành Của Máy Tính</h2>
+            <p class="text-xs text-emerald-200/80">Thông số OS, Giám sát tiến trình Task Manager, Phân quyền Standard User &amp; Ảo hóa</p>
+          </div>
+          <button onclick="switchMainTab('lab4')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs self-start sm:self-center">
+            Sang Lab 4 <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+
+        <!-- Bài 1 (2 điểm): 3 mức độ kiểm tra OS + Terminal mô phỏng -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div class="lg:col-span-6 glass-forest-sub rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-base text-emerald-300">Bài 1 (2 điểm): 3 Mức độ kiểm tra thông tin Hệ điều hành</h3>
+            <ul class="text-xs sm:text-sm space-y-2.5 text-emerald-100/90">
+              <li class="p-2.5 rounded-xl bg-black/30 border border-emerald-400/15">
+                <strong class="text-amber-300">1. Mức độ đơn giản (Giao diện đồ họa):</strong><br>
+                • <em>Windows:</em> Vào <code>Settings &gt; System &gt; About</code> để xem phiên bản Windows, CPU và RAM.<br>
+                • <em>macOS:</em> Nhấn biểu tượng <code>Menu Apple &gt; About This Mac</code>.
+              </li>
+              <li class="p-2.5 rounded-xl bg-black/30 border border-emerald-400/15">
+                <strong class="text-amber-300">2. Mức độ chi tiết (System Information):</strong><br>
+                • <em>Windows:</em> Nhấn <code>Windows + R</code>, gõ <code>msinfo32</code> &gt; Enter để xem lớp trừu tượng phần cứng (HAL), BIOS và danh sách Drivers.
+              </li>
+              <li class="p-2.5 rounded-xl bg-black/30 border border-emerald-400/15">
+                <strong class="text-amber-300">3. Mức độ chuyên sâu (Dòng lệnh CLI):</strong><br>
+                • <em>Windows CMD:</em> Gõ lệnh <code>systeminfo</code> xem thời gian Uptime và phiên bản Kernel.<br>
+                • <em>macOS Terminal:</em> Gõ lệnh <code>uname -a</code> xem phiên bản nhân Darwin.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Khung Terminal giả lập kết quả lệnh systeminfo -->
+          <div class="lg:col-span-6 bg-stone-950 border border-emerald-400/35 rounded-2xl p-4 font-mono text-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-stone-800 pb-2 mb-3">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                  <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                  <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                  <span class="text-stone-400 ml-2">Command Prompt — systeminfo (PK04952)</span>
+                </div>
+                <button onclick="runSimulatedOSCmd()" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-sans font-semibold">
+                  Chạy lại lệnh
+                </button>
+              </div>
+              <pre id="os-terminal-output" class="text-emerald-300 whitespace-pre-wrap leading-relaxed">C:\Users\PhoMinhQuocKnul_PK04952&gt; systeminfo
+Host Name:                 FPT-POLY-ITI102-WD22301
+OS Name:                   Microsoft Windows 11 Pro
+OS Version:                10.0.22631 N/A Build 22631
+System Manufacturer:       LENOVO IdeaPad Slim 5
+System Type:               x64-based PC
+Processor(s):              1 Processor(s) Installed.
+                           [01]: Intel64 Family 6 Model 186 Stepping 2 ~2500 Mhz
+Total Physical Memory:     16,384 MB (16 GB RAM)
+System Boot Time:          25/11/2026, 07:15:02 AM</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bài 2 (2 điểm): Mô phỏng Task Manager tương tác (End Task) -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 2 (2 điểm): Giám sát Tiến trình (Task Manager) &amp; Thực hành End Task</h3>
+              <p class="text-xs text-emerald-100/80">Tổ hợp phím mở nhanh trên Windows: <code class="bg-black/50 px-1.5 py-0.5 rounded text-amber-300">Ctrl + Shift + Esc</code> (macOS: <code>Activity Monitor</code>). Hãy thử bấm <strong>End Task</strong> tiến trình bên dưới:</p>
+            </div>
+            <button onclick="resetTaskManager()" class="px-3 py-1.5 rounded-xl bg-emerald-800/70 hover:bg-emerald-700 text-xs text-emerald-200 border border-emerald-400/25">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Khôi phục tiến trình
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-emerald-900/70 text-emerald-200 border-b border-emerald-400/30">
+                  <th class="p-2.5">Tên tiến trình (Processes)</th>
+                  <th class="p-2.5">Trạng thái</th>
+                  <th class="p-2.5">CPU</th>
+                  <th class="p-2.5">Memory (RAM)</th>
+                  <th class="p-2.5 text-right">Hành động (Bước 4)</th>
+                </tr>
+              </thead>
+              <tbody id="task-manager-body" class="divide-y divide-emerald-400/15">
+                <!-- Render JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bài 3 (2 điểm), Bài 4 (2 điểm), Bài 5 (2 điểm) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="glass-forest-sub rounded-2xl p-4 space-y-2">
+            <span class="text-[11px] font-bold text-amber-300 uppercase">Bài 3 (2 điểm) • Least Privilege</span>
+            <h4 class="font-bold text-sm text-white">Tạo tài khoản Standard User</h4>
+            <p class="text-xs text-emerald-100/85 leading-relaxed">
+              <strong>Trên Windows 11:</strong> Mở <code>Settings (Win + I) &gt; Accounts &gt; Other users &gt; Add account</code> &gt; Chọn <em>"Add a user without a Microsoft account"</em> &gt; Nhập tên user &amp; mật khẩu. Mặc định tài khoản mới có quyền <strong>Standard User</strong> (hạn chế cài phần mềm lạ làm hỏng hệ thống).<br>
+              <strong>Trên macOS:</strong> <code>System Settings &gt; Users &amp; Groups &gt; Add User...</code> &gt; Chọn loại <em>Standard</em>.
+            </p>
+          </div>
+
+          <div class="glass-forest-sub rounded-2xl p-4 space-y-2">
+            <span class="text-[11px] font-bold text-amber-300 uppercase">Bài 4 (2 điểm) • Fast User Switching</span>
+            <h4 class="font-bold text-sm text-white">Kết hợp Admin &amp; Standard User</h4>
+            <p class="text-xs text-emerald-100/85 leading-relaxed">
+              <strong>Cách chuyển đổi nhanh trên Windows 11:</strong> Nhấn nút <code>Start</code> &gt; Nhấp vào biểu tượng tên tài khoản ở góc dưới bên trái &gt; Chọn tài khoản muốn chuyển sang. Hệ thống đưa về màn hình khóa để đăng nhập tài khoản mới mà vẫn giữ nguyên ứng dụng đang chạy ngầm ở tài khoản cũ.
+            </p>
+          </div>
+
+          <div class="glass-forest-sub rounded-2xl p-4 space-y-2">
+            <span class="text-[11px] font-bold text-amber-300 uppercase">Bài 5 Mở Rộng (2 điểm) • Virtualization</span>
+            <h4 class="font-bold text-sm text-white">Trải nghiệm Ảo hóa (Virtual Machine)</h4>
+            <p class="text-xs text-emerald-100/85 leading-relaxed">
+              Sử dụng <strong>VMware Workstation</strong> hoặc <strong>Oracle VirtualBox</strong> trên máy cấu hình tối thiểu <strong>16GB RAM, 512GB SSD</strong> để cài đặt hệ điều hành Linux (Ubuntu) song song với Windows 11, phục vụ thực hành lập trình và kiểm thử an toàn.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LAB 4: SOFTWARE, CLOUD COMPUTING, PLATFORM                                -->
+    <!-- ========================================================================= -->
+    <section id="section-lab4" class="main-section hidden fade-in space-y-6">
+      <div class="glass-forest rounded-3xl p-6 space-y-6">
+        <div class="border-b border-emerald-400/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">LAB 4 • 10 ĐIỂM</span>
+            <h2 class="font-serif text-2xl font-bold text-white mt-1">Phần Mềm, Điện Toán Đám Mây &amp; Nền Tảng Đa Thiết Bị</h2>
+            <p class="text-xs text-emerald-200/80">Cài đặt phần mềm thiết yếu, Lưu trữ Cloud, Google Maps đa nền tảng &amp; Mã nguồn mở OpenOffice</p>
+          </div>
+          <button onclick="switchMainTab('lab5')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs self-start sm:self-center">
+            Sang Lab 5 <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+
+        <!-- Bài 1 (2 điểm): 4 phần mềm thông dụng -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+          <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 1 (2 điểm): Cài đặt 4 phần mềm thông dụng cho học tập</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="p-3.5 rounded-2xl bg-black/35 border border-emerald-400/20 flex flex-col justify-between gap-3">
+              <div>
+                <div class="flex items-center justify-between">
+                  <i class="fa-brands fa-edge text-sky-400 text-2xl"></i>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">Đã cài đặt</span>
+                </div>
+                <h4 class="font-bold text-sm text-white mt-2">Microsoft Edge</h4>
+                <p class="text-xs text-emerald-100/75 mt-1">Trình duyệt web mặc định tối ưu hiệu năng Windows 11, tích hợp đọc PDF &amp; Copilot.</p>
+              </div>
+              <a href="https://www.microsoft.com/en-us/edge" target="_blank" rel="noopener noreferrer" class="text-xs text-amber-300 hover:underline font-semibold">Trang tải chính thức →</a>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-black/35 border border-emerald-400/20 flex flex-col justify-between gap-3">
+              <div>
+                <div class="flex items-center justify-between">
+                  <i class="fa-brands fa-chrome text-amber-400 text-2xl"></i>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">Đã cài đặt</span>
+                </div>
+                <h4 class="font-bold text-sm text-white mt-2">Google Chrome</h4>
+                <p class="text-xs text-emerald-100/75 mt-1">Trình duyệt phổ biến nhất, đồng bộ tài khoản Google và công cụ DevTools kiểm thử Web.</p>
+              </div>
+              <a href="https://www.google.com/chrome/" target="_blank" rel="noopener noreferrer" class="text-xs text-amber-300 hover:underline font-semibold">Trang tải chính thức →</a>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-black/35 border border-emerald-400/20 flex flex-col justify-between gap-3">
+              <div>
+                <div class="flex items-center justify-between">
+                  <i class="fa-solid fa-file-zipper text-purple-400 text-2xl"></i>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">Đã cài đặt</span>
+                </div>
+                <h4 class="font-bold text-sm text-white mt-2">WinRAR</h4>
+                <p class="text-xs text-emerald-100/75 mt-1">Công cụ nén và giải nén tệp tin (.zip, .rar) phục vụ đóng gói bài nộp FPT Polytechnic.</p>
+              </div>
+              <a href="https://www.win-rar.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-amber-300 hover:underline font-semibold">Trang tải chính thức →</a>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-black/35 border border-emerald-400/20 flex flex-col justify-between gap-3">
+              <div>
+                <div class="flex items-center justify-between">
+                  <i class="fa-solid fa-code text-blue-400 text-2xl"></i>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">Đã cài đặt</span>
+                </div>
+                <h4 class="font-bold text-sm text-white mt-2">Visual Studio Code</h4>
+                <p class="text-xs text-emerald-100/75 mt-1">Trình soạn thảo mã nguồn nhẹ, mạnh mẽ, hỗ trợ HTML/CSS/JS và Draw.io Extension.</p>
+              </div>
+              <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-amber-300 hover:underline font-semibold">Trang tải chính thức →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bài 2 (2 điểm) & Bài 4 (2 điểm) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-base text-emerald-300">Bài 2 (2 điểm): Dịch vụ lưu trữ đám mây (Cloud Storage)</h3>
+            <div class="space-y-2.5 text-xs sm:text-sm">
+              <div class="p-3 rounded-xl bg-black/30 border border-emerald-400/20 flex items-center justify-between gap-2">
+                <div>
+                  <strong class="text-amber-300">Google Drive (15GB miễn phí):</strong> Tích hợp sâu với Google Docs, Sheets, Slides và NotebookLM, dễ dàng chia sẻ link nộp bài.
+                </div>
+                <a href="https://workspace.google.com/products/drive/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-emerald-950 font-bold text-xs shrink-0">Mở Drive</a>
+              </div>
+              <div class="p-3 rounded-xl bg-black/30 border border-emerald-400/20 flex items-center justify-between gap-2">
+                <div>
+                  <strong class="text-sky-300">Microsoft OneDrive (5GB miễn phí):</strong> Đồng bộ tự động thư mục Desktop/Documents trên Windows 11 và Microsoft 365.
+                </div>
+                <a href="https://www.microsoft.com/en-us/microsoft-365/onedrive/online-cloud-storage" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-sky-400 text-sky-950 font-bold text-xs shrink-0">Mở OneDrive</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-emerald-300">Bài 4 (2 điểm): Phần mềm văn phòng mã nguồn mở Apache OpenOffice</h3>
+              <a href="https://www.openoffice.org/" target="_blank" rel="noopener noreferrer" class="text-xs text-amber-300 underline">openoffice.org</a>
+            </div>
+            <p class="text-xs text-emerald-100/85 leading-relaxed">
+              <strong>Apache OpenOffice</strong> là bộ ứng dụng văn phòng mã nguồn mở hoàn toàn miễn phí, tương thích tốt với các định dạng tài liệu phổ biến và gồm 5 phân hệ chính:
+            </p>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-200 border border-blue-400/30"><strong>Writer:</strong> Soạn thảo văn bản</span>
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 border border-emerald-400/30"><strong>Calc:</strong> Bảng tính điện tử</span>
+              <span class="px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-200 border border-orange-400/30"><strong>Impress:</strong> Trình chiếu Slide</span>
+              <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-200 border border-amber-400/30"><strong>Draw:</strong> Vẽ đồ họa vector</span>
+              <span class="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-200 border border-purple-400/30"><strong>Base:</strong> Quản lý CSDL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bài 3 (2 điểm) & Bài 5 (2 điểm): Google Maps đa nền tảng -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 class="font-bold text-base text-emerald-300">Bài 3 (2 điểm) &amp; Bài 5 (2 điểm): Sử dụng Google Maps đa nền tảng &amp; Chia sẻ hành trình</h3>
+            <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold text-xs inline-flex items-center gap-1.5">
+              <i class="fa-solid fa-map-location-dot"></i> Mở Google Maps thực tế
+            </a>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 rounded-xl bg-black/30 border border-emerald-400/20 space-y-1">
+              <div class="font-bold text-amber-300">Quy trình đồng bộ Máy tính → Điện thoại (Bài 3):</div>
+              <p class="text-emerald-100/85">1. Đăng nhập cùng 1 tài khoản Google trên máy tính và điện thoại.<br>2. Truy cập Google Maps trên PC, tìm tuyến đường từ nhà đến <strong>Cao đẳng FPT Polytechnic</strong>.<br>3. Nhấn <em>"Gửi chỉ đường tới điện thoại của bạn"</em> (Send directions to your phone).<br>4. Mở thông báo trên điện thoại để bắt đầu dẫn đường bằng giọng nói.</p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-black/30 border border-emerald-400/20 space-y-1">
+              <div class="font-bold text-emerald-300">Chia sẻ hành trình trực tiếp — Live Location Sharing (Bài 5):</div>
+              <p class="text-emerald-100/85">Trên ứng dụng Google Maps điện thoại, nhấn vào ảnh đại diện &gt; chọn <strong>Chia sẻ vị trí (Location sharing)</strong> &gt; chọn thời gian (1 giờ hoặc đến khi tắt) và gửi liên kết cho người thân/bạn bè để theo dõi lộ trình di chuyển an toàn theo thời gian thực.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LAB 5: MẠNG MÁY TÍNH, MẠNG INTERNET                                       -->
+    <!-- ========================================================================= -->
+    <section id="section-lab5" class="main-section hidden fade-in space-y-6">
+      <div class="glass-forest rounded-3xl p-6 space-y-6">
+        <div class="border-b border-emerald-400/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">LAB 5 • 10 ĐIỂM</span>
+            <h2 class="font-serif text-2xl font-bold text-white mt-1">Mạng Máy Tính &amp; Mạng Internet (IP, MAC, Ping, Whois)</h2>
+            <p class="text-xs text-emerald-200/80">Định danh thiết bị mạng, kiểm tra độ trễ ICMP và tra cứu tên miền ICANN / VNNIC</p>
+          </div>
+          <button onclick="switchMainTab('lab6')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs self-start sm:self-center">
+            Sang Lab 6 <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+
+        <!-- Bài 1 (2 điểm) & Bài 2 (2 điểm) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <!-- Bài 1 -->
+          <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-base text-emerald-300">Bài 1 (2 điểm): Xác định địa chỉ IP và MAC qua lệnh <code class="text-amber-300">ipconfig /all</code></h3>
+            <ul class="text-xs space-y-1.5 text-emerald-100/90">
+              <li>• <strong class="text-amber-300">IPv4 Address (Địa chỉ IP logic 32-bit):</strong> Ví dụ <code>192.168.1.105</code> — dùng để định vị thiết bị trong mạng LAN/Internet, có thể thay đổi theo mạng Wi-Fi.</li>
+              <li>• <strong class="text-emerald-300">Physical Address (Địa chỉ MAC vật lý 48-bit):</strong> Ví dụ <code>A4-C3-F0-85-2D-9E</code> — mã định danh duy nhất gắn cứng vào card mạng (NIC) bởi nhà sản xuất.</li>
+              <li>• <strong class="text-sky-300">Default Gateway:</strong> Ví dụ <code>192.168.1.1</code> — địa chỉ IP của bộ định tuyến (Router) giúp máy tính kết nối ra Internet.</li>
+            </ul>
+            <pre class="bg-stone-950 border border-emerald-400/25 rounded-xl p-3 font-mono text-[11px] text-emerald-300 overflow-x-auto">C:\Users\PK04952&gt; ipconfig /all
+Wireless LAN adapter Wi-Fi:
+   Physical Address. . . . . . . . . : A4-C3-F0-85-2D-9E
+   IPv4 Address. . . . . . . . . . . : 192.168.1.105(Preferred)
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.1.1</pre>
+          </div>
+
+          <!-- Bài 2 -->
+          <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-base text-emerald-300">Bài 2 (2 điểm): Kiểm tra kết nối &amp; độ trễ với lệnh <code class="text-amber-300">ping google.com</code></h3>
+            <p class="text-xs text-emerald-100/90 leading-relaxed">
+              Lệnh <code>ping</code> sử dụng giao thức <strong>ICMP</strong> gửi 4 gói tin (mỗi gói 32 bytes) tới máy chủ đích và đo thời gian phản hồi:
+            </p>
+            <ul class="text-xs space-y-1 text-emerald-100/90">
+              <li>• <strong class="text-amber-300">Time (ms):</strong> Thời gian khứ hồi (Round-Trip Time). Dưới 30ms là mạng rất mượt; trên 150ms là mạng bị trễ (lag).</li>
+              <li>• <strong class="text-emerald-300">Lost = 0 (0% loss):</strong> Không mất gói tin nào, đường truyền mạng ổn định.</li>
+            </ul>
+            <pre class="bg-stone-950 border border-emerald-400/25 rounded-xl p-3 font-mono text-[11px] text-amber-200 overflow-x-auto">C:\Users\PK04952&gt; ping google.com
+Reply from 142.250.199.78: bytes=32 time=18ms TTL=116
+Reply from 142.250.199.78: bytes=32 time=19ms TTL=116
+Ping statistics for 142.250.199.78:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)</pre>
+          </div>
+        </div>
+
+        <!-- Bài 3 (2 điểm), Bài 4 (2 điểm) & Công cụ Tra cứu Whois tương tác -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 3 &amp; Bài 4 (4 điểm): Tra cứu tên miền Quốc tế (ICANN) &amp; Việt Nam (VNNIC)</h3>
+            <div class="flex gap-2">
+              <a href="https://lookup.icann.org/" target="_blank" rel="noopener noreferrer" class="text-xs px-3 py-1 rounded-lg bg-blue-500/20 text-blue-200 border border-blue-400/30">ICANN Lookup</a>
+              <a href="https://vnnic.vn/whois-information" target="_blank" rel="noopener noreferrer" class="text-xs px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">VNNIC Whois</a>
+            </div>
+          </div>
+
+          <!-- Công cụ giả lập tra cứu Whois ngay trên trang -->
+          <div class="bg-black/35 rounded-2xl p-4 border border-amber-400/30 space-y-3">
+            <div class="text-xs font-bold text-amber-300"><i class="fa-solid fa-magnifying-glass mr-1"></i> Mô phỏng Tra cứu Thông tin Quản trị Tên miền (Chọn tên miền trong đề Lab 5):</div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="lookupWhoisDomain('caodang.fpt.edu.vn')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold">caodang.fpt.edu.vn</button>
+              <button onclick="lookupWhoisDomain('fpt.vn')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold">fpt.vn</button>
+              <button onclick="lookupWhoisDomain('fptshop.com.vn')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold">fptshop.com.vn</button>
+              <button onclick="lookupWhoisDomain('google.com')" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold">google.com</button>
+              <button onclick="lookupWhoisDomain('vnexpress.net')" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold">vnexpress.net</button>
+            </div>
+            <div id="whois-result-box" class="bg-stone-950 rounded-xl p-3.5 font-mono text-xs text-emerald-200 border border-emerald-400/20">
+              <strong>Tên miền:</strong> caodang.fpt.edu.vn | <strong>Cơ quan quản lý:</strong> Trung tâm Internet Việt Nam (VNNIC)<br>
+              <strong>Chủ sở hữu:</strong> Trường Đại học FPT (FPT Polytechnic) | <strong>Trạng thái:</strong> Đang hoạt động (Active)
+            </div>
+          </div>
+
+          <div class="bg-black/30 rounded-xl p-3.5 text-xs border border-emerald-400/20">
+            <strong class="text-amber-300">Bài 5 Mở Rộng (2 điểm) — Bảo mật &amp; Tăng tốc DNS:</strong> Sử dụng máy chủ phân giải tên miền công cộng tốc độ cao như <strong>Cloudflare DNS (1.1.1.1)</strong> hoặc <strong>Google Public DNS (8.8.8.8)</strong> giúp tăng tốc độ truy cập web và ngăn chặn các trang web giả mạo độc hại.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LAB 6: TƯ DUY LẬP TRÌNH VÀ TỰ ĐỘNG HÓA                                    -->
+    <!-- ========================================================================= -->
+    <section id="section-lab6" class="main-section hidden fade-in space-y-6">
+      <div class="glass-forest rounded-3xl p-6 space-y-6">
+        <div class="border-b border-emerald-400/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">LAB 6 • 10 ĐIỂM</span>
+            <h2 class="font-serif text-2xl font-bold text-white mt-1">Tư Duy Lập Trình &amp; Tự Động Hóa Quy Trình (RPA)</h2>
+            <p class="text-xs text-emerald-200/80">Phác thảo Wireframe trên VS Code + Draw.io &amp; Tự động hóa với Power Automate Desktop</p>
+          </div>
+          <button onclick="switchMainTab('lab7')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs self-start sm:self-center">
+            Sang Lab 7 (Code App) <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+
+        <!-- Bài 1 (4 điểm): Wireframe ứng dụng Quản lý ghi chú cá nhân (VS Code + Draw.io) -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 1 (4 điểm): Bản vẽ phác thảo Wireframe Ứng dụng Quản lý Ghi chú Cá nhân</h3>
+              <p class="text-xs text-emerald-100/80">Thiết kế bằng tiện ích <strong>Draw.io Integration</strong> trong Visual Studio Code (Tiền đề trực tiếp cho Lab 7 Bài 3)</p>
+            </div>
+            <button onclick="switchMainTab('lab7')" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold text-xs">
+              Xem sản phẩm chạy thật ở Lab 7 →
+            </button>
+          </div>
+
+          <!-- Sơ đồ Wireframe SVG chi tiết -->
+          <div class="bg-stone-950 border border-emerald-400/30 rounded-2xl p-4 overflow-x-auto">
+            <svg viewBox="0 0 760 270" class="w-full min-w-[600px] h-auto">
+              <!-- Khung cửa sổ VS Code / Draw.io -->
+              <rect x="4" y="4" width="752" height="262" rx="12" fill="#0c1914" stroke="#34d399" stroke-width="1.5"/>
+              <rect x="4" y="4" width="752" height="28" rx="12" fill="#064e3b"/>
+              <text x="20" y="22" fill="#d1fae5" font-size="11" font-weight="bold">📐 Wireframe: Personal_Notes_App.drawio.svg — SV: Phó Minh Quốc Knul (PK04952)</text>
+
+              <!-- Khu vực 1: Form nhập ghi chú (Bên trái) -->
+              <rect x="20" y="46" width="230" height="205" rx="8" fill="#11261e" stroke="#6ee7b7" stroke-dasharray="4,3"/>
+              <text x="34" y="66" fill="#34d399" font-size="11" font-weight="bold">1. Khung Nhập Ghi Chú Mới</text>
+              <rect x="34" y="78" width="202" height="26" rx="4" fill="#06130e" stroke="#34d399"/>
+              <text x="42" y="95" fill="#a7f3d0" font-size="10">[Input] Thời gian (Ngày / Giờ)</text>
+              <rect x="34" y="112" width="202" height="26" rx="4" fill="#06130e" stroke="#34d399"/>
+              <text x="42" y="129" fill="#a7f3d0" font-size="10">[Input] Tiêu đề ghi chú</text>
+              <rect x="34" y="146" width="202" height="54" rx="4" fill="#06130e" stroke="#34d399"/>
+              <text x="42" y="165" fill="#a7f3d0" font-size="10">[Textarea] Nội dung ghi chú...</text>
+              <rect x="34" y="210" width="202" height="28" rx="6" fill="#10b981"/>
+              <text x="92" y="228" fill="#022c22" font-size="11" font-weight="bold">+ Lưu Ghi Chú</text>
+
+              <!-- Mũi tên luồng dữ liệu -->
+              <line x1="255" y1="145" x2="288" y2="145" stroke="#fbbf24" stroke-width="2"/>
+              <polygon points="288,140 298,145 288,150" fill="#fbbf24"/>
+
+              <!-- Khu vực 2: Danh sách ghi chú & Trợ lý AI (Bên phải) -->
+              <rect x="302" y="46" width="438" height="205" rx="8" fill="#11261e" stroke="#fbbf24"/>
+              <text x="318" y="66" fill="#fcd34d" font-size="11" font-weight="bold">2. Danh Sách Ghi Chú &amp; Tích Hợp AI (Lab 7)</text>
+
+              <!-- Thẻ ghi chú mẫu 1 -->
+              <rect x="318" y="78" width="198" height="72" rx="6" fill="#06130e" stroke="#34d399"/>
+              <text x="328" y="95" fill="#6ee7b7" font-size="9.5" font-weight="bold">🕒 25/11/2026 - 08:30</text>
+              <text x="328" y="112" fill="#ffffff" font-size="10" font-weight="bold">Hoàn thành Lab 6 &amp; Lab 7</text>
+              <text x="328" y="128" fill="#a7f3d0" font-size="9">Vẽ phác thảo trên VS Code...</text>
+              <text x="328" y="142" fill="#34d399" font-size="9">[✓ Xong]   [🗑 Xóa]</text>
+
+              <!-- Thẻ ghi chú mẫu 2 -->
+              <rect x="526" y="78" width="198" height="72" rx="6" fill="#06130e" stroke="#34d399"/>
+              <text x="536" y="95" fill="#6ee7b7" font-size="9.5" font-weight="bold">🕒 25/11/2026 - 14:00</text>
+              <text x="536" y="112" fill="#ffffff" font-size="10" font-weight="bold">Ôn tập thuyết trình Lab 8</text>
+              <text x="536" y="128" fill="#a7f3d0" font-size="9">Chủ đề phòng chống Deepfake</text>
+              <text x="536" y="142" fill="#fbbf24" font-size="9">[○ Đang làm]   [🗑 Xóa]</text>
+
+              <!-- Thanh AI dưới cùng -->
+              <rect x="318" y="162" width="406" height="76" rx="6" fill="#2e1065" stroke="#c084fc"/>
+              <text x="330" y="182" fill="#e9d5ff" font-size="10.5" font-weight="bold">✨ Module Trí Tuệ Nhân Tạo (Google AI Studio)</text>
+              <text x="330" y="200" fill="#f3e8ff" font-size="9.5">• Tự động tóm tắt toàn bộ ghi chú trong ngày</text>
+              <text x="330" y="216" fill="#f3e8ff" font-size="9.5">• Đề xuất thứ tự công việc ưu tiên cần hoàn thành trước</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Bài 2 (3 điểm), Bài 3 (2 điểm), Bài 4 (1 điểm) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="glass-forest-sub rounded-2xl p-4 space-y-2">
+            <span class="text-[11px] font-bold text-amber-300">BÀI 2 (3 ĐIỂM) • RPA</span>
+            <h4 class="font-bold text-sm text-white">Cài đặt Power Automate Desktop (PAD)</h4>
+            <p class="text-xs text-emerald-100/85 leading-relaxed">
+              <strong>Khái niệm RPA:</strong> Công nghệ tự động hóa quy trình bằng robot phần mềm trên Windows 10/11.<br>
+              <strong>Cách 1 (Microsoft Store):</strong> Mở link Store chính thức &gt; Bấm <em>Tải xuống / Install</em> (không cần quyền Admin).<br>
+              <strong>Cách 2 (File MSI):</strong> Tải <code>Setup.Microsoft.PowerAutomate.exe</code> &gt; Chạy cài đặt và đăng nhập tài khoản Microsoft.
+            </p>
+          </div>
+
+          <div class="glass-forest-sub rounded-2xl p-4 space-y-2">
+            <span class="text-[11px] font-bold text-amber-300">BÀI 3 (2 ĐIỂM) • THỰC HÀNH FLOW</span>
+            <h4 class="font-bold text-sm text-white">Trải nghiệm Flow tự động hóa</h4>
+            <p class="text-xs text-emerald-100/85 leading-relaxed">
+              Đã trải nghiệm mục <strong>Examples &gt; Desktop Automation</strong> và tự tạo Flow <em>"Đổi tên hàng loạt file Lab"</em>: Tự động quét thư mục bài tập và thêm tiền tố <code>PK04952_CNTT4.0_</code> vào toàn bộ file Word/PDF chỉ trong 2 giây.
+            </p>
+          </div>
+
+          <div class="glass-forest-sub rounded-2xl p-4 space-y-2">
+            <span class="text-[11px] font-bold text-amber-300">BÀI 4 MỞ RỘNG (1 ĐIỂM) • FLOWCHART</span>
+            <h4 class="font-bold text-sm text-white">Lưu đồ khối hoạt động của Robot RPA</h4>
+            <div class="bg-black/35 p-2.5 rounded-xl font-mono text-[11px] text-emerald-300 leading-relaxed">
+              [Bắt đầu] → [Lấy danh sách file thư mục Lab] → [Vòng lặp For Each] → [Đổi tên thêm PK04952_] → [Ghi log Excel] → [Kết thúc]
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LAB 7: TRÍ TUỆ NHÂN TẠO – AI & ỨNG DỤNG TRONG CÔNG VIỆC                   -->
+    <!-- ========================================================================= -->
+    <section id="section-lab7" class="main-section hidden fade-in space-y-6">
+      <div class="glass-forest rounded-3xl p-6 space-y-6">
+        <div class="border-b border-emerald-400/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-purple-500/25 text-purple-200 text-xs font-bold">LAB 7 • 10 ĐIỂM • GOOGLE AI STUDIO</span>
+            <h2 class="font-serif text-2xl font-bold text-white mt-1">Trí Tuệ Nhân Tạo AI &amp; Ứng Dụng Quản Lý Ghi Chú Thực Tế</h2>
+            <p class="text-xs text-emerald-200/80">Kỹ năng Prompt Engineering, Trải nghiệm Gallery &amp; Ứng dụng Quản lý Ghi chú tương tác trực tiếp (Bài 3)</p>
+          </div>
+          <button onclick="switchMainTab('lab8')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs self-start sm:self-center">
+            Sang Lab 8 <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+
+        <!-- Bài 1 (2 điểm) & Bài 2 (3 điểm) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base text-emerald-300">Bài 1 (2 điểm): Kỹ năng viết Prompt chuẩn trên Google AI Studio</h3>
+              <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-amber-300 underline">aistudio.google.com</a>
+            </div>
+            <p class="text-xs text-emerald-100/85">Công thức Prompt 4 thành phần: <strong>[Vai trò] + [Ngữ cảnh] + [Nhiệm vụ cụ thể] + [Định dạng đầu ra]</strong>.</p>
+            <div class="bg-black/40 rounded-xl p-3 text-xs text-amber-100 border border-emerald-400/20">
+              <strong>Ví dụ Prompt đã thực hành:</strong><br>
+              <em>"Bạn là giảng viên CNTT tại FPT Polytechnic. Hãy giúp sinh viên Phó Minh Quốc Knul (lớp ITI102-WD22301) tóm tắt 5 nguyên tắc bảo mật thông tin cá nhân trên mạng xã hội dưới dạng bảng 3 cột dễ nhớ."</em>
+            </div>
+          </div>
+
+          <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-base text-emerald-300">Bài 2 (3 điểm): Trải nghiệm 3 ứng dụng trong Google AI Studio Gallery</h3>
+            <ul class="text-xs space-y-2 text-emerald-100/90">
+              <li class="p-2 rounded-xl bg-black/30"><strong>1. Gemini Slingshot:</strong> Game bắn bóng tương tác nhận diện cử chỉ bàn tay theo thời gian thực kết hợp chiến thuật gợi ý từ mô hình Gemini Flash.</li>
+              <li class="p-2 rounded-xl bg-black/30"><strong>2. EchoPaths:</strong> Ứng dụng tạo câu chuyện âm thanh dẫn đường sống động dựa trên hành trình di chuyển thực tế.</li>
+              <li class="p-2 rounded-xl bg-black/30"><strong>3. Function Call Kitchen:</strong> Mô phỏng khả năng gọi hàm (Function Calling) của Gemini để điều khiển hơn 100 công cụ nhà bếp thông minh.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- BÀI 3 (3 ĐIỂM): ỨNG DỤNG QUẢN LÝ GHI CHÚ CÁ NHÂN TƯƠNG TÁC THỰC TẾ -->
+        <div class="rounded-3xl p-5 sm:p-6 bg-gradient-to-br from-emerald-950/90 via-teal-950/80 to-purple-950/50 border-2 border-emerald-400/40 space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-400/20 pb-3">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-bold">BÀI 3 (3 ĐIỂM) • SẢN PHẨM CHẠY TRỰC TIẾP</span>
+              <h3 class="font-serif text-xl font-bold text-white mt-1">Ứng Dụng Quản Lý Ghi Chú Cá Nhân Thông Minh (Tích Hợp AI)</h3>
+              <p class="text-xs text-emerald-200/80">Phát triển từ bản phác thảo Lab 6 Bài 1: Có thời gian thực, trạng thái hoàn thành và Trợ lý AI phân tích.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="analyzeNotesWithAI('summary')" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow transition flex items-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> AI Tóm tắt ghi chú
+              </button>
+              <button onclick="analyzeNotesWithAI('priority')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-950 text-xs font-bold shadow transition flex items-center gap-1.5">
+                <i class="fa-solid fa-bolt"></i> AI Gợi ý ưu tiên
+              </button>
+            </div>
+          </div>
+
+          <!-- Khung kết quả AI -->
+          <div id="lab7-ai-box" class="hidden bg-black/45 border border-purple-400/40 rounded-2xl p-4 text-xs sm:text-sm text-purple-100 leading-relaxed"></div>
+
+          <!-- Form thêm ghi chú + Danh sách ghi chú -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <form onsubmit="addLab7Note(event)" class="lg:col-span-4 bg-black/35 border border-emerald-400/25 rounded-2xl p-4 space-y-3">
+              <h4 class="font-bold text-sm text-emerald-300"><i class="fa-solid fa-plus-circle mr-1"></i> Thêm Ghi Chú Mới</h4>
+              <div>
+                <label class="block text-xs text-emerald-200/80 mb-1">Thời gian ghi chú *</label>
+                <input type="datetime-local" id="l7-note-time" required value="2026-11-25T10:30" class="w-full bg-emerald-950 border border-emerald-400/30 rounded-xl px-3 py-2 text-xs text-white" />
+              </div>
+              <div>
+                <label class="block text-xs text-emerald-200/80 mb-1">Tiêu đề *</label>
+                <input type="text" id="l7-note-title" required placeholder="VD: Nộp trọn bộ Lab 1 - Lab 8" class="w-full bg-emerald-950 border border-emerald-400/30 rounded-xl px-3 py-2 text-xs text-white" />
+              </div>
+              <div>
+                <label class="block text-xs text-emerald-200/80 mb-1">Nội dung ghi chú *</label>
+                <textarea id="l7-note-text" rows="3" required placeholder="Nhập dòng chữ ghi chú cá nhân..." class="w-full bg-emerald-950 border border-emerald-400/30 rounded-xl px-3 py-2 text-xs text-white"></textarea>
+              </div>
+              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs transition">
+                Lưu Ghi Chú Vào Danh Sách
+              </button>
+            </form>
+
+            <div class="lg:col-span-8 space-y-3">
+              <div class="flex items-center justify-between text-xs text-emerald-200/80">
+                <span>Danh sách ghi chú cá nhân (<strong id="l7-note-count" class="text-amber-300">0</strong> ghi chú)</span>
+                <button onclick="resetLab7Notes()" class="text-emerald-300 hover:underline"><i class="fa-solid fa-rotate-left mr-1"></i>Khôi phục mẫu</button>
+              </div>
+              <div id="l7-notes-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bài 4 Mở rộng (2 điểm): Bộ sưu tập 5 mẫu Prompt vàng -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+          <h3 class="font-bold text-base text-amber-300"><i class="fa-solid fa-star mr-1.5"></i>Bài 4 Mở Rộng (2 điểm): Bộ Sưu Tập 5 Mẫu Prompt Vàng Cho Sinh Viên CNTT</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-black/30 border border-emerald-400/20">
+              <strong class="text-emerald-300">1. Prompt Giải thích &amp; Sửa lỗi Code:</strong><br>
+              "Đóng vai Senior Web Developer, hãy giải thích nguyên nhân lỗi sau và viết lại đoạn code sạch hơn kèm chú thích tiếng Việt..."
+            </div>
+            <div class="p-3 rounded-xl bg-black/30 border border-emerald-400/20">
+              <strong class="text-emerald-300">2. Prompt Tóm tắt Slide bài giảng:</strong><br>
+              "Tóm tắt nội dung chính của tài liệu này thành 5 gạch đầu dòng cốt lõi và 3 câu hỏi ôn tập trắc nghiệm..."
+            </div>
+            <div class="p-3 rounded-xl bg-black/30 border border-emerald-400/20">
+              <strong class="text-emerald-300">3. Prompt Lập dàn ý thuyết trình:</strong><br>
+              "Xây dựng kịch bản thuyết trình 5 phút gồm 5 slide về chủ đề An toàn thông tin cho sinh viên năm nhất..."
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- LAB 8: AN TOÀN THÔNG TIN VÀ ĐẠO ĐỨC SỐ                                    -->
+    <!-- ========================================================================= -->
+    <section id="section-lab8" class="main-section hidden fade-in space-y-6">
+      <div class="glass-forest rounded-3xl p-6 space-y-6">
+        <div class="border-b border-emerald-400/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">LAB 8 • 10 ĐIỂM</span>
+            <h2 class="font-serif text-2xl font-bold text-white mt-1">An Toàn Thông Tin &amp; Đạo Đức Số Trong Kỷ Nguyên AI</h2>
+            <p class="text-xs text-emerald-200/80">Tổng hợp tài liệu, Sơ đồ Mind-map Deepfake, Slide thuyết trình 5 trang, Phản biện 6 cấp độ &amp; Trắc nghiệm</p>
+          </div>
+          <button onclick="switchMainTab('forest')" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold text-xs self-start sm:self-center">
+            <i class="fa-solid fa-tree mr-1"></i> Về trang chủ Rừng
+          </button>
+        </div>
+
+        <!-- Bài 1 (2 điểm): Bảng tổng hợp nguồn tài liệu 3 chủ đề -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+          <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 1 (2 điểm): Tìm kiếm &amp; Tập hợp tài liệu đa dạng (Website, PDF/DOC, Ảnh, Video)</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-emerald-900/70 text-emerald-200 border-b border-emerald-400/30">
+                  <th class="p-3 w-1/4">Chủ đề</th>
+                  <th class="p-3">Nguồn Website &amp; Văn bản (PDF/DOC)</th>
+                  <th class="p-3">Hình ảnh &amp; Video minh họa</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-emerald-400/15">
+                <tr>
+                  <td class="p-3 font-bold text-amber-300">1. An toàn thông tin</td>
+                  <td class="p-3">Cổng không gian mạng quốc gia (<a href="https://khonggianmang.vn/" target="_blank" rel="noopener noreferrer" class="underline text-emerald-300">khonggianmang.vn</a>) &amp; Cẩm nang phòng chống lừa đảo trực tuyến (PDF).</td>
+                  <td class="p-3">Infographic quy tắc 3 Không khi nhận cuộc gọi lạ; Video hướng dẫn bật xác thực 2 lớp (2FA).</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-bold text-amber-300">2. Công nghệ Deepfake</td>
+                  <td class="p-3">Bài phân tích cơ chế mạng nơ-ron GAN/Diffusion giả mạo khuôn mặt và giọng nói trên báo VnExpress Công nghệ.</td>
+                  <td class="p-3">Video so sánh khuôn mặt thật vs Deepfake (nhấp nháy mắt không tự nhiên, viền cổ mờ).</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-bold text-amber-300">3. Luật, Quy định &amp; Tiêu chuẩn</td>
+                  <td class="p-3"><strong>Luật An ninh mạng 2018</strong>, <strong>Nghị định 13/2023/NĐ-CP</strong> về Bảo vệ dữ liệu cá nhân, Tiêu chuẩn quốc tế <strong>ISO/IEC 27001</strong>.</td>
+                  <td class="p-3">Sơ đồ quyền của chủ thể dữ liệu cá nhân theo Nghị định 13/2023/NĐ-CP.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bài 2 (2 điểm): Sơ đồ tư duy (Mind-map trực quan) -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-3">
+          <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 2 (2 điểm): Khai thác thông tin — Sơ đồ Tư duy (Mind-Map)</h3>
+          <div class="bg-stone-950 border border-emerald-400/30 rounded-2xl p-4 overflow-x-auto">
+            <svg viewBox="0 0 760 220" class="w-full min-w-[600px] h-auto">
+              <!-- Trung tâm -->
+              <rect x="290" y="82" width="180" height="56" rx="28" fill="#059669" stroke="#fef08a" stroke-width="2"/>
+              <text x="380" y="106" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">AN TOÀN THÔNG TIN</text>
+              <text x="380" y="123" text-anchor="middle" fill="#fef08a" font-size="10">&amp; PHÒNG CHỐNG DEEPFAKE</text>
+
+              <!-- Nhánh 1: Dấu hiệu Deepfake -->
+              <line x1="290" y1="95" x2="195" y2="45" stroke="#fbbf24" stroke-width="2"/>
+              <rect x="15" y="18" width="185" height="54" rx="10" fill="#1c1917" stroke="#fbbf24"/>
+              <text x="107" y="38" text-anchor="middle" fill="#fcd34d" font-size="10" font-weight="bold">1. Dấu hiệu nhận biết Deepfake</text>
+              <text x="107" y="54" text-anchor="middle" fill="#fef3c7" font-size="8.5">Ánh sáng lệch, khẩu hình trễ, giọng vô cảm</text>
+
+              <!-- Nhánh 2: Bảo mật cá nhân -->
+              <line x1="290" y1="125" x2="195" y2="170" stroke="#34d399" stroke-width="2"/>
+              <rect x="15" y="145" width="185" height="54" rx="10" fill="#1c1917" stroke="#34d399"/>
+              <text x="107" y="165" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="bold">2. Bảo vệ danh tính số</text>
+              <text x="107" y="181" text-anchor="middle" fill="#d1fae5" font-size="8.5">Mật khẩu mạnh, 2FA, không chia sẻ CCCD</text>
+
+              <!-- Nhánh 3: Pháp luật -->
+              <line x1="470" y1="95" x2="565" y2="45" stroke="#c084fc" stroke-width="2"/>
+              <rect x="560" y="18" width="185" height="54" rx="10" fill="#1c1917" stroke="#c084fc"/>
+              <text x="652" y="38" text-anchor="middle" fill="#e9d5ff" font-size="10" font-weight="bold">3. Hành lang Pháp lý VN</text>
+              <text x="652" y="54" text-anchor="middle" fill="#f3e8ff" font-size="8.5">Luật An ninh mạng &amp; NĐ 13/2023/NĐ-CP</text>
+
+              <!-- Nhánh 4: Đạo đức số -->
+              <line x1="470" y1="125" x2="565" y2="170" stroke="#38bdf8" stroke-width="2"/>
+              <rect x="560" y="145" width="185" height="54" rx="10" fill="#1c1917" stroke="#38bdf8"/>
+              <text x="652" y="165" text-anchor="middle" fill="#7dd3fc" font-size="10" font-weight="bold">4. Đạo đức sử dụng AI</text>
+              <text x="652" y="181" text-anchor="middle" fill="#e0f2fe" font-size="8.5">Không tạo tin giả, tôn trọng bản quyền số</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Bài 3 (2 điểm): Slide thuyết trình 5 trang tương tác -->
+        <div class="glass-forest-sub rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 class="font-bold text-base sm:text-lg text-emerald-300">Bài 3 (2 điểm): Slide Thuyết Trình 5 Trang Tương Tác</h3>
+            <div class="flex items-center gap-2">
+              <button onclick="changeLab8Slide(-1)" class="px-3 py-1.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-xs font-bold text-white">
+                <i class="fa-solid fa-chevron-left"></i> Trước
+              </button>
+              <span id="l8-slide-indicator" class="text-xs font-bold text-amber-300 px-2">Slide 1 / 5</span>
+              <button onclick="changeLab8Slide(1)" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-xs font-bold text-emerald-950">
+                Tiếp <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <div id="l8-slide-stage" class="bg-gradient-to-br from-emerald-950 to-stone-900 border-2 border-amber-400/40 rounded-2xl p-6 min-h-[190px] flex flex-col justify-between">
+            <!-- Render bằng JS -->
+          </div>
+        </div>
+
+        <!-- Bài 4 (2 điểm) & Bài 5 (2 điểm) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <!-- Bài 4: 6 cấp độ phản biện -->
+          <div class="lg:col-span-7 glass-forest-sub rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-base text-emerald-300">Bài 4 (2 điểm): Tự đánh giá &amp; Phản biện theo 6 cấp độ</h3>
+            <div class="space-y-2 text-xs">
+              <div class="p-2.5 rounded-xl bg-black/30 flex items-start gap-2.5"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">Cấp 1</span><span><strong>Lắng nghe nghiêm túc:</strong> Tập trung theo dõi trọn vẹn phần trình bày của các nhóm bạn trong lớp ITI102-WD22301.</span></div>
+              <div class="p-2.5 rounded-xl bg-black/30 flex items-start gap-2.5"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">Cấp 2</span><span><strong>Hình thành chính kiến:</strong> Đồng tình với giải pháp bật 2FA, nhưng nhận thấy nhóm bạn chưa nhấn mạnh rủi ro lộ giọng nói trên video công khai.</span></div>
+              <div class="p-2.5 rounded-xl bg-black/30 flex items-start gap-2.5"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">Cấp 3</span><span><strong>Thảo luận đóng góp:</strong> Đề xuất bổ sung quy tắc "gọi điện thoại truyền thống xác minh lại" khi nhận cuộc gọi video mượn tiền.</span></div>
+              <div class="p-2.5 rounded-xl bg-black/30 flex items-start gap-2.5"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Cấp 4</span><span><strong>Phản biện xây dựng:</strong> Đặt câu hỏi phản biện: <em>"Nếu kẻ xấu dùng AI tạo giọng nói theo thời gian thực thì mật khẩu SMS có còn đủ an toàn không?"</em></span></div>
+              <div class="p-2.5 rounded-xl bg-black/30 flex items-start gap-2.5"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Cấp 5</span><span><strong>Tự học nâng cao:</strong> Chủ động cập nhật kiến thức về Passkey và Nghị định 13/2023/NĐ-CP sau buổi học.</span></div>
+              <div class="p-2.5 rounded-xl bg-black/30 flex items-start gap-2.5"><span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">Cấp 6</span><span><strong>Lan tỏa cộng đồng:</strong> Chia sẻ cẩm nang nhận diện Deepfake cho gia đình, người thân để phòng tránh lừa đảo qua mạng.</span></div>
+            </div>
+          </div>
+
+          <!-- Bài 5 Mở rộng: Mini Quiz 5 câu chấm điểm trực tiếp -->
+          <div class="lg:col-span-5 glass-forest-sub rounded-2xl p-5 space-y-3 border border-amber-400/30">
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-bold">BÀI 5 MỞ RỘNG (2 ĐIỂM) • MINI QUIZ</span>
+            <h3 class="font-bold text-base text-white">Trắc Nghiệm Nhanh An Toàn Thông Tin &amp; Deepfake</h3>
+            <div id="lab8-quiz-container" class="space-y-3 text-xs">
+              <!-- Render JS -->
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <button onclick="gradeLab8Quiz()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs">
+                Chấm điểm bài làm
+              </button>
+              <span id="lab8-quiz-score" class="text-xs font-bold text-amber-300"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="glass-forest border-t border-emerald-400/20 mt-8 py-4 px-4 text-xs text-emerald-200/80">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        Sinh viên: <strong class="text-white">Phó Minh Quốc Knul</strong> • MSSV: <strong class="text-amber-300">PK04952</strong> • Lớp: <strong class="text-emerald-300">ITI102-WD22301</strong>
+      </div>
+      <div>
+        Trọn bộ Thực hành <strong class="text-emerald-300">Lab 1 – Lab 8</strong> • Môn <strong class="text-amber-300">CNTT 4.0</strong> • Cao đẳng FPT Polytechnic
+      </div>
+    </div>
+  </footer>
+
+  <!-- TOAST THÔNG BÁO -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-emerald-950 border border-emerald-400 text-emerald-100 px-4 py-3 rounded-2xl shadow-2xl text-xs sm:text-sm flex items-center gap-2.5">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+    <span id="toast-msg">Thông báo</span>
+  </div>
+
+  <!-- JAVASCRIPT TOÀN BỘ TÍNH NĂNG -->
+  <script>
+    // =========================================================================
+    // 1. HIỆU ỨNG ĐOM ĐÓM RỪNG & ÂM THANH RỪNG TỰ NHIÊN (WEB AUDIO API)
+    // =========================================================================
+    function initFireflies() {
+      const container = document.getElementById('fireflies-container');
+      for (let i = 0; i < 22; i++) {
+        const el = document.createElement('div');
+        el.className = 'firefly';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.top = (20 + Math.random() * 75) + 'vh';
+        el.style.animationDelay = (Math.random() * 10) + 's';
+        el.style.animationDuration = (9 + Math.random() * 8) + 's';
+        container.appendChild(el);
+      }
+    }
+
+    let isNightMode = false;
+    function toggleForestLight() {
+      isNightMode = !isNightMode;
+      document.body.classList.toggle('night-mode', isNightMode);
+      const btn = document.getElementById('btn-light-mode');
+      if (isNightMode) {
+        btn.innerHTML = '<i class="fa-solid fa-moon text-lime-300"></i> <span>Rừng đêm đom đóm</span>';
+        showToast('Đã chuyển sang chế độ Rừng đêm đom đóm lung linh!');
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-sun text-amber-300"></i> <span>Ban ngày</span>';
+        showToast('Đã chuyển sang chế độ Ban ngày nắng xuyên tán lá!');
+      }
+    }
+
+    // Âm thanh rừng bằng Web Audio API (tiếng suối chảy + tiếng chim hót ngẫu nhiên)
+    let audioCtx = null;
+    let isAudioPlaying = false;
+    let birdTimer = null;
+    let streamNode = null;
+
+    function toggleForestAudio() {
+      const btn = document.getElementById('btn-forest-audio');
+      if (isAudioPlaying) {
+        isAudioPlaying = false;
+        if (birdTimer) clearInterval(birdTimer);
+        if (audioCtx) {
+          audioCtx.close();
+          audioCtx = null;
+        }
+        btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-emerald-300"></i> <span>Âm thanh rừng</span>';
+        showToast('Đã tắt âm thanh khu rừng.');
+        return;
+      }
+
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        isAudioPlaying = true;
+
+        // Tiếng gió & suối nhẹ (Pink noise lọc thông thấp)
+        const bufferSize = 2 * audioCtx.sampleRate;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99765 * b0 + white * 0.0990460;
+          b1 = 0.96300 * b1 + white * 0.2965164;
+          b2 = 0.57000 * b2 + white * 1.0526913;
+          output[i] = (b0 + b1 + b2 + white * 0.1848) * 0.025;
+        }
+        streamNode = audioCtx.createBufferSource();
+        streamNode.buffer = noiseBuffer;
+        streamNode.loop = true;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 420;
+        streamNode.connect(filter);
+        filter.connect(audioCtx.destination);
+        streamNode.start();
+
+        // Tiếng chim hót định kỳ
+        playBirdChirp();
+        birdTimer = setInterval(playBirdChirp, 3800);
+
+        btn.innerHTML = '<i class="fa-solid fa-volume-high text-lime-300 animate-pulse"></i> <span>Đang phát tiếng rừng</span>';
+        showToast('Đang phát âm thanh suối chảy và chim hót trong rừng!');
+      } catch (e) {
+        showToast('Trình duyệt chặn tự động phát âm thanh.');
+      }
+    }
+
+    function playBirdChirp(pitchBase = 1800) {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      const startFreq = pitchBase + Math.random() * 600;
+      osc.frequency.setValueAtTime(startFreq, now);
+      osc.frequency.exponentialRampToValueAtTime(startFreq * 1.35, now + 0.12);
+      osc.frequency.exponentialRampToValueAtTime(startFreq * 0.9, now + 0.25);
+
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.exponentialRampToValueAtTime(0.06, now + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    }
+
+    // =========================================================================
+    // 2. DỮ LIỆU ĐỘNG VẬT RỪNG VIỆT NAM & BỘ LỌC TẦNG SINH THÁI
+    // =========================================================================
+    const forestAnimals = [
+      {
+        name: 'Sao la (Kỳ lân châu Á)',
+        layer: 'floor',
+        layerLabel: 'Mặt đất rừng',
+        status: 'Cực kỳ nguy cấp • Trường Sơn',
+        freq: 650,
+        img: 'https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=crop&w=700&q=80',
+        desc: 'Biểu tượng đa dạng sinh học của rừng Trường Sơn Việt Nam, sở hữu cặp sừng dài thẳng thanh mảnh và tính cách hiền lành, kín đáo.'
+      },
+      {
+        name: 'Voọc chà vá chân nâu',
+        layer: 'canopy',
+        layerLabel: 'Tầng tán cao',
+        status: 'Nữ hoàng linh trưởng • Sơn Trà',
+        freq: 1400,
+        img: 'https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?auto=format&fit=crop&w=700&q=80',
+        desc: 'Loài linh trưởng rực rỡ sắc màu bậc nhất thế giới, sinh sống thành bầy đàn trên các tán cây cổ thụ cao trong rừng nguyên sinh.'
+      },
+      {
+        name: 'Chim Hồng hoàng (Phượng hoàng đất)',
+        layer: 'canopy',
+        layerLabel: 'Tầng tán cao',
+        status: 'Sách Đỏ Việt Nam • Cát Tiên',
+        freq: 2100,
+        img: 'https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=700&q=80',
+        desc: 'Sải cánh rộng hùng vĩ với chiếc mỏ vàng lớn đặc trưng, đóng vai trò quan trọng trong việc phát tán hạt giống cho rừng già.'
+      },
+      {
+        name: 'Hổ Đông Dương',
+        layer: 'floor',
+        layerLabel: 'Mặt đất rừng',
+        status: 'Chúa sơn lâm • Bảo tồn nghiêm ngặt',
+        freq: 320,
+        img: 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=700&q=80',
+        desc: 'Động vật săn mồi đỉnh cao giúp cân bằng hệ sinh thái rừng nhiệt đới, di chuyển uyển chuyển dưới những tán lá rậm rạp.'
+      },
+      {
+        name: 'Voi châu Á (Voi rừng Tây Nguyên)',
+        layer: 'floor',
+        layerLabel: 'Mặt đất rừng',
+        status: 'VQG Yok Đôn &amp; Cát Tiên',
+        freq: 410,
+        img: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=700&q=80',
+        desc: 'Loài thú trên cạn lớn nhất Việt Nam, mở lối đi tự nhiên trong rừng rậm và tạo nguồn nước cho nhiều loài sinh vật nhỏ khác.'
+      },
+      {
+        name: 'Công lục Đông Dương',
+        layer: 'understory',
+        layerLabel: 'Tầng dưới tán',
+        status: 'Vũ điệu đại ngàn • Cát Tiên',
+        freq: 1750,
+        img: 'https://images.unsplash.com/photo-1511208687438-2c5a5abb810c?auto=format&fit=crop&w=700&q=80',
+        desc: 'Sở hữu bộ lông xanh ngọc lục bảo óng ánh tuyệt đẹp, thường kiếm ăn ở các trảng cỏ và tầng cây bụi dưới tán rừng.'
+      }
+    ];
+
+    function renderAnimals(layerFilter = 'ALL') {
+      const grid = document.getElementById('animals-grid');
+      const list = layerFilter === 'ALL'
+        ? forestAnimals
+        : forestAnimals.filter(a => a.layer === layerFilter);
+
+      grid.innerHTML = list.map(a => `
+        <div class="rounded-2xl overflow-hidden glass-forest-sub hover:border-emerald-400/50 transition group flex flex-col justify-between">
+          <div>
+            <div class="aspect-video overflow-hidden relative bg-emerald-950">
+              <img src="${a.img}" alt="${a.name}" onerror="this.src='https://placehold.co/600x400/064e3b/d1fae5?text=${encodeURIComponent(a.name)}'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/65 text-emerald-300 text-[10px] font-bold border border-emerald-400/30">
+                ${a.layerLabel}
+              </span>
+            </div>
+            <div class="p-4 space-y-1.5">
+              <div class="text-[11px] font-semibold text-amber-300">${a.status}</div>
+              <h4 class="font-serif text-lg font-bold text-white">${a.name}</h4>
+              <p class="text-xs text-emerald-100/80 leading-relaxed">${a.desc}</p>
+            </div>
+          </div>
+          <div class="px-4 pb-4">
+            <button onclick="playBirdChirp(${a.freq}); showToast('Đang mô phỏng âm thanh của ${a.name} trong rừng!')" class="w-full py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500 hover:text-emerald-950 text-emerald-200 border border-emerald-400/30 text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-volume-high"></i> Nghe âm thanh sinh vật
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterAnimals(layer) {
+      document.querySelectorAll('.ani-filter-btn').forEach(b => {
+        b.className = 'ani-filter-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-950/80 text-emerald-200 border border-emerald-400/30 hover:bg-emerald-800/60 transition';
+      });
+      const active = document.getElementById(layer === 'understory' ? 'ani-filter-understory' : 'ani-btn-' + layer);
+      if (active) {
+        active.className = 'ani-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-400 text-emerald-950 shadow transition';
+      }
+      renderAnimals(layer);
+    }
+
+    // Render 8 thẻ mục lục Lab ở trang chủ
+    function renderLabOverviewCards() {
+      const labs = [
+        { id: 'lab1', num: 'Lab 1', title: 'Công nghệ thông tin 4.0', sub: 'AI, IoT, So sánh & Nghề nghiệp IT' },
+        { id: 'lab2', num: 'Lab 2', title: 'Thiết bị phần cứng máy tính', sub: 'Desktop PC, Laptop SV & HDD vs SSD' },
+        { id: 'lab3', num: 'Lab 3', title: 'Hệ điều hành máy tính', sub: 'systeminfo, Task Manager & User' },
+        { id: 'lab4', num: 'Lab 4', title: 'Phần mềm & Cloud Computing', sub: 'VS Code, Drive, Maps & OpenOffice' },
+        { id: 'lab5', num: 'Lab 5', title: 'Mạng máy tính & Internet', sub: 'IP/MAC, Ping & Tra cứu Whois' },
+        { id: 'lab6', num: 'Lab 6', title: 'Tư duy lập trình & RPA', sub: 'Wireframe Draw.io & Power Automate' },
+        { id: 'lab7', num: 'Lab 7', title: 'AI Studio & App Ghi Chú', sub: 'Prompting, Gallery & App chạy thật' },
+        { id: 'lab8', num: 'Lab 8', title: 'An toàn thông tin & Đạo đức số', sub: 'Deepfake, Mind-map, Slide & Quiz' }
+      ];
+      document.getElementById('lab-overview-cards').innerHTML = labs.map(l => `
+        <button onclick="switchMainTab('${l.id}')" class="text-left p-4 rounded-2xl glass-forest-sub hover:bg-emerald-800/60 hover:border-emerald-400/50 transition group">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-bold">${l.num}</span>
+            <i class="fa-solid fa-arrow-right text-xs text-amber-300 group-hover:translate-x-1 transition-transform"></i>
+          </div>
+          <div class="font-bold text-sm text-white mt-2">${l.title}</div>
+          <div class="text-xs text-emerald-200/70 mt-0.5">${l.sub}</div>
+        </button>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 3. ĐIỀU HƯỚNG TAB & TÌM KIẾM NHANH BÀI TẬP LAB 1 - LAB 8
+    // =========================================================================
+    function switchMainTab(tabId) {
+      document.querySelectorAll('.main-section').forEach(sec => sec.classList.add('hidden'));
+      const target = document.getElementById('section-' + tabId);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.main-nav-btn').forEach(btn => {
+        btn.classList.remove('nav-active');
+        btn.classList.add('text-emerald-100/85', 'hover:bg-emerald-400/15');
+      });
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('nav-active');
+        activeBtn.classList.remove('text-emerald-100/85', 'hover:bg-emerald-400/15');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    const searchIndex = [
+      { keywords: 'lab 1 ai iot big data cloud nghe nghiep vinai momo', title: 'Lab 1: Công nghệ AI, IoT, Đời sống 4.0 & Nghề nghiệp', tab: 'lab1' },
+      { keywords: 'lab 2 cpu ram ssd hdd desktop laptop phong vu gearvn', title: 'Lab 2: Phần cứng PC, Chọn Laptop SV & So sánh HDD/SSD', tab: 'lab2' },
+      { keywords: 'lab 3 he dieu hanh systeminfo task manager end task standard user', title: 'Lab 3: Hệ điều hành, Task Manager & Phân quyền User', tab: 'lab3' },
+      { keywords: 'lab 4 phan mem chrome edge winrar vs code google drive maps openoffice', title: 'Lab 4: Phần mềm, Cloud Drive, Google Maps & OpenOffice', tab: 'lab4' },
+      { keywords: 'lab 5 mang ip mac ipconfig ping whois icann vnnic dns', title: 'Lab 5: Địa chỉ IP/MAC, Lệnh Ping & Tra cứu Whois VNNIC', tab: 'lab5' },
+      { keywords: 'lab 6 wireframe draw.io power automate rpa flow', title: 'Lab 6: Phác thảo Wireframe & Tự động hóa Power Automate', tab: 'lab6' },
+      { keywords: 'lab 7 ai studio prompt gallery ung dung ghi chu', title: 'Lab 7: Google AI Studio & Ứng dụng Ghi chú AI tương tác', tab: 'lab7' },
+      { keywords: 'lab 8 an toan thong tin deepfake mindmap slide phan bien quiz', title: 'Lab 8: An toàn thông tin, Mind-map Deepfake & Trắc nghiệm', tab: 'lab8' }
+    ];
+
+    function handleQuickSearch(val) {
+      const box = document.getElementById('quick-search-results');
+      const q = val.toLowerCase().trim();
+      if (!q) {
+        box.classList.add('hidden');
+        return;
+      }
+      const matches = searchIndex.filter(item => item.keywords.includes(q) || item.title.toLowerCase().includes(q));
+      if (matches.length === 0) {
+        box.innerHTML = `<div class="p-2 text-xs text-emerald-200/70">Không tìm thấy nội dung phù hợp.</div>`;
+      } else {
+        box.innerHTML = matches.map(m => `
+          <button onclick="switchMainTab('${m.tab}'); document.getElementById('quick-search-results').classList.add('hidden');" class="w-full text-left p-2 rounded-xl hover:bg-emerald-800/80 text-xs text-emerald-100 block">
+            <i class="fa-solid fa-arrow-right text-amber-300 mr-1.5"></i>${m.title}
+          </button>
+        `).join('');
+      }
+      box.classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // 4. TƯƠNG TÁC LAB 2, LAB 3, LAB 5
+    // =========================================================================
+    function evaluatePCConfig() {
+      const major = document.getElementById('pc-major').value;
+      const ram = parseInt(document.getElementById('pc-ram').value, 10);
+      const disk = document.getElementById('pc-disk').value;
+      const box = document.getElementById('pc-eval-result');
+
+      let advice = '';
+      if (disk === 'hdd') {
+        advice = '⚠️ <strong>Cảnh báo tốc độ:</strong> Máy chỉ dùng HDD sẽ khởi động rất chậm. Bạn nên nâng cấp ngay ổ <strong>SSD NVMe</strong>!';
+      } else if (ram < 16 && (major === 'ai' || major === 'design')) {
+        advice = '⚡ <strong>Khuyến nghị nâng cấp:</strong> Với ngành AI hoặc Đồ họa 3D, bạn nên nâng cấp từ 8GB lên tối thiểu <strong>16GB – 32GB RAM</strong>.';
+      } else {
+        advice = `✅ <strong>Cấu hình đạt chuẩn sinh viên FPT Polytechnic:</strong> Với <strong>${ram}GB RAM</strong> và ổ cứng tốc độ cao, bạn hoàn toàn học tốt các môn thực hành lập trình và công cụ AI!`;
+      }
+      box.innerHTML = advice;
+    }
+
+    function runSimulatedOSCmd() {
+      const out = document.getElementById('os-terminal-output');
+      const now = new Date().toLocaleTimeString('vi-VN');
+      out.textContent = `C:\\Users\\PhoMinhQuocKnul_PK04952> systeminfo\n[Đang truy xuất thông số hạt nhân lúc ${now}...]\nHost Name:                 FPT-POLY-ITI102-WD22301\nOS Name:                   Microsoft Windows 11 Pro (64-bit)\nOS Version:                10.0.22631 Build 22631\nProcessor:                 Intel(R) Core(TM) i5-13500H @ 2.60GHz\nTotal Physical Memory:     16,384 MB (16 GB RAM)\nAvailable Physical Memory: 9,420 MB`;
+      showToast('Đã cập nhật thông số hệ điều hành Windows 11!');
+    }
+
+    const defaultProcesses = [
+      { id: 1, name: 'Visual Studio Code (Code.exe)', status: 'Running', cpu: '4.2%', ram: '485 MB' },
+      { id: 2, name: 'Google Chrome (12 tabs)', status: 'Running', cpu: '8.5%', ram: '1,120 MB' },
+      { id: 3, name: 'Ứng dụng Soạn thảo Văn bản (Không dùng)', status: 'Not Responding', cpu: '19.4%', ram: '640 MB' },
+      { id: 4, name: 'Microsoft Power Automate Desktop', status: 'Running', cpu: '1.8%', ram: '210 MB' }
+    ];
+    let currentProcesses = [...defaultProcesses];
+
+    function renderTaskManager() {
+      const tbody = document.getElementById('task-manager-body');
+      if (currentProcesses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-emerald-300 text-xs">Đã kết thúc tất cả tiến trình mẫu! Bấm "Khôi phục tiến trình" để thử lại.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = currentProcesses.map(p => `
+        <tr>
+          <td class="p-2.5 font-semibold text-white">${p.name}</td>
+          <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[11px] ${p.status === 'Not Responding' ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/20 text-emerald-300'}">${p.status}</span></td>
+          <td class="p-2.5 text-amber-300">${p.cpu}</td>
+          <td class="p-2.5 text-emerald-200">${p.ram}</td>
+          <td class="p-2.5 text-right">
+            <button onclick="endSimulatedTask(${p.id})" class="px-2.5 py-1 rounded-lg bg-red-600/80 hover:bg-red-500 text-white text-xs font-semibold transition">
+              End Task
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function endSimulatedTask(id) {
+      const proc = currentProcesses.find(p => p.id === id);
+      currentProcesses = currentProcesses.filter(p => p.id !== id);
+      renderTaskManager();
+      if (proc) showToast(`Đã kết thúc tiến trình "${proc.name}" và giải phóng ${proc.ram} RAM!`);
+    }
+
+    function resetTaskManager() {
+      currentProcesses = [...defaultProcesses];
+      renderTaskManager();
+      showToast('Đã khôi phục danh sách tiến trình Task Manager.');
+    }
+
+    function lookupWhoisDomain(domain) {
+      const data = {
+        'caodang.fpt.edu.vn': '<strong>Tên miền:</strong> caodang.fpt.edu.vn | <strong>Cơ quan quản lý:</strong> VNNIC (Việt Nam)<br><strong>Chủ sở hữu:</strong> Trường Đại học FPT (FPT Polytechnic) | <strong>Nameserver:</strong> ns1.fpt.vn, ns2.fpt.vn',
+        'fpt.vn': '<strong>Tên miền:</strong> fpt.vn | <strong>Cơ quan quản lý:</strong> VNNIC (Việt Nam)<br><strong>Chủ sở hữu:</strong> Công ty Cổ phần FPT | <strong>Trạng thái:</strong> Đang hoạt động (Active)',
+        'fptshop.com.vn': '<strong>Tên miền:</strong> fptshop.com.vn | <strong>Cơ quan quản lý:</strong> VNNIC (Việt Nam)<br><strong>Chủ sở hữu:</strong> Công ty Cổ phần Bán lẻ Kỹ thuật số FPT | <strong>Trạng thái:</strong> Active',
+        'google.com': '<strong>Domain:</strong> GOOGLE.COM | <strong>Cơ quan điều phối:</strong> ICANN (MarkMonitor Inc.)<br><strong>Ngày đăng ký:</strong> 15/09/1997 | <strong>Trạng thái:</strong> clientDeleteProhibited',
+        'vnexpress.net': '<strong>Domain:</strong> VNEXPRESS.NET | <strong>Cơ quan điều phối:</strong> ICANN<br><strong>Đơn vị vận hành:</strong> Báo điện tử VnExpress (FPT Online) | <strong>Trạng thái:</strong> Active'
+      };
+      document.getElementById('whois-result-box').innerHTML = data[domain] || '';
+      showToast('Đã tra cứu thông tin Whois cho tên miền: ' + domain);
+    }
+
+    // =========================================================================
+    // 5. LAB 7 BÀI 3: ỨNG DỤNG QUẢN LÝ GHI CHÚ CÁ NHÂN TÍCH HỢP AI
+    // =========================================================================
+    const defaultLab7Notes = [
+      { id: 101, time: '2026-11-24T08:00', title: 'Hoàn thiện Lab 1 – Lab 3', text: 'Tìm hiểu công nghệ AI/IoT, cấu hình phần cứng PC và thực hành lệnh systeminfo, Task Manager.', done: true },
+      { id: 102, time: '2026-11-24T14:30', title: 'Thực hành Lab 4 – Lab 5', text: 'Cài đặt VS Code, đồng bộ Google Drive, tra cứu Whois tên miền fpt.vn qua VNNIC.', done: true },
+      { id: 103, time: '2026-11-25T09:00', title: 'Phác thảo Wireframe & Power Automate (Lab 6)', text: 'Vẽ giao diện ứng dụng ghi chú bằng Draw.io trong VS Code và chạy thử RPA đổi tên file.', done: true },
+      { id: 104, time: '2026-11-25T15:00', title: 'Chuẩn bị thuyết trình Lab 8 An toàn thông tin', text: 'Hoàn thiện sơ đồ Mind-map phòng chống Deepfake và ôn tập 6 cấp độ phản biện.', done: false }
+    ];
+    let lab7Notes = [];
+
+    function loadLab7Notes() {
+      try {
+        const saved = localStorage.getItem('pk04952_lab7_notes');
+        lab7Notes = saved ? JSON.parse(saved) : [...defaultLab7Notes];
+      } catch (e) {
+        lab7Notes = [...defaultLab7Notes];
+      }
+      renderLab7Notes();
+    }
+
+    function saveLab7Notes() {
+      try { localStorage.setItem('pk04952_lab7_notes', JSON.stringify(lab7Notes)); } catch (e) {}
+    }
+
+    function renderLab7Notes() {
+      const list = document.getElementById('l7-notes-list');
+      document.getElementById('l7-note-count').textContent = lab7Notes.length;
+      list.innerHTML = lab7Notes.map(n => `
+        <div class="p-3.5 rounded-2xl border flex flex-col justify-between gap-2.5 ${n.done ? 'bg-emerald-950/60 border-emerald-400/35' : 'bg-black/40 border-amber-400/30'}">
+          <div class="space-y-1">
+            <div class="text-[11px] font-semibold text-amber-300"><i class="fa-regular fa-clock mr-1"></i>${n.time.replace('T', ' ')}</div>
+            <h5 class="font-bold text-sm ${n.done ? 'line-through text-emerald-200/75' : 'text-white'}">${n.title}</h5>
+            <p class="text-xs text-emerald-100/85">${n.text}</p>
+          </div>
+          <div class="pt-2 border-t border-emerald-400/15 flex items-center justify-between text-xs">
+            <button onclick="toggleLab7Done(${n.id})" class="font-semibold ${n.done ? 'text-emerald-400' : 'text-amber-300'}">
+              <i class="fa-solid ${n.done ? 'fa-circle-check' : 'fa-regular fa-circle'} mr-1"></i>${n.done ? 'Đã xong' : 'Đánh dấu xong'}
+            </button>
+            <button onclick="deleteLab7Note(${n.id})" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addLab7Note(e) {
+      e.preventDefault();
+      const time = document.getElementById('l7-note-time').value;
+      const title = document.getElementById('l7-note-title').value.trim();
+      const text = document.getElementById('l7-note-text').value.trim();
+      if (!time || !title || !text) return;
+
+      lab7Notes.unshift({ id: Date.now(), time, title, text, done: false });
+      saveLab7Notes();
+      renderLab7Notes();
+      document.getElementById('l7-note-title').value = '';
+      document.getElementById('l7-note-text').value = '';
+      showToast('Đã lưu ghi chú mới vào ứng dụng Lab 7!');
+    }
+
+    function toggleLab7Done(id) {
+      const item = lab7Notes.find(n => n.id === id);
+      if (item) {
+        item.done = !item.done;
+        saveLab7Notes();
+        renderLab7Notes();
+      }
+    }
+
+    function deleteLab7Note(id) {
+      lab7Notes = lab7Notes.filter(n => n.id !== id);
+      saveLab7Notes();
+      renderLab7Notes();
+      showToast('Đã xóa ghi chú.');
+    }
+
+    function resetLab7Notes() {
+      lab7Notes = [...defaultLab7Notes];
+      saveLab7Notes();
+      renderLab7Notes();
+      showToast('Đã khôi phục 4 ghi chú mẫu Lab 7.');
+    }
+
+    function analyzeNotesWithAI(mode) {
+      const box = document.getElementById('lab7-ai-box');
+      box.classList.remove('hidden');
+      const total = lab7Notes.length;
+      const done = lab7Notes.filter(n => n.done).length;
+      const pending = lab7Notes.filter(n => !n.done);
+
+      if (mode === 'summary') {
+        box.innerHTML = `<strong>✨ Trợ lý AI Tóm tắt:</strong> Sinh viên <strong>Phó Minh Quốc Knul (PK04952)</strong> hiện có <strong>${total} ghi chú</strong> (đã hoàn thành <strong>${done}/${total}</strong>). Tiến độ thực hành từ Lab 1 đến Lab 8 đang diễn ra đúng kế hoạch.`;
+      } else {
+        const listStr = pending.length > 0
+          ? pending.map(p => `• <strong>${p.title}</strong> (${p.time.replace('T', ' ')})`).join('<br>')
+          : '• Tất cả ghi chú đều đã hoàn thành xuất sắc!';
+        box.innerHTML = `<strong>⚡ AI Đề xuất công việc ưu tiên (${pending.length} việc chưa xong):</strong><br>${listStr}`;
+      }
+    }
+
+    // =========================================================================
+    // 6. LAB 8: SLIDE THUYẾT TRÌNH 5 TRANG & MINI QUIZ CHẤM ĐIỂM
+    // =========================================================================
+    const lab8Slides = [
+      {
+        tag: 'SLIDE 1 / 5 • TRANG BÌA',
+        title: 'Nhận Diện Deepfake & Bảo Vệ Danh Tính Số Trong Kỷ Nguyên AI',
+        body: 'Sinh viên trình bày: <strong>Phó Minh Quốc Knul (MSSV: PK04952)</strong> — Lớp: <strong>ITI102-WD22301</strong>.<br>Môn học: Công nghệ thông tin 4.0 — Cao đẳng FPT Polytechnic.'
+      },
+      {
+        tag: 'SLIDE 2 / 5 • KHÁI NIỆM',
+        title: 'Công Nghệ Deepfake Là Gì?',
+        body: 'Deepfake (Deep Learning + Fake) sử dụng mạng nơ-ron học sâu để hoán đổi khuôn mặt, mô phỏng biểu cảm và giả lập giọng nói của một người với độ chân thực cao.'
+      },
+      {
+        tag: 'SLIDE 3 / 5 • NHẬN DIỆN',
+        title: '4 Dấu Hiệu Nhận Biết Video / Cuộc Gọi Deepfake',
+        body: '1. Nhấp nháy mắt thiếu tự nhiên hoặc ánh mắt đờ đẫn.<br>2. Vùng viền quanh khuôn mặt, tóc và cổ bị mờ hoặc lệch tông ánh sáng.<br>3. Chuyển động môi không khớp hoàn toàn với âm thanh.<br>4. Ngữ điệu giọng nói đều đều, thiếu cảm xúc khi hỏi câu bất ngờ.'
+      },
+      {
+        tag: 'SLIDE 4 / 5 • PHÁP LUẬT & ĐẠO ĐỨC SỐ',
+        title: 'Quy Định Pháp Luật Việt Nam Về Dữ Liệu Cá Nhân',
+        body: 'Theo <strong>Luật An ninh mạng 2018</strong> và <strong>Nghị định 13/2023/NĐ-CP</strong>, hành vi thu thập, sử dụng trái phép hình ảnh/giọng nói cá nhân để lừa đảo hoặc bôi nhọ danh dự sẽ bị xử lý nghiêm minh theo pháp luật.'
+      },
+      {
+        tag: 'SLIDE 5 / 5 • GIẢI PHÁP PHÒNG CHỐNG',
+        title: 'Quy Tắc "3 Kiểm Chứng" Bảo Vệ Bản Thân & Gia Đình',
+        body: '• <strong>Chậm lại 30 giây:</strong> Không vội chuyển tiền khi nhận cuộc gọi video khẩn cấp.<br>• <strong>Gọi lại kênh khác:</strong> Gọi số điện thoại di động truyền thống để xác minh.<br>• <strong>Bảo mật 2FA:</strong> Bật xác thực hai lớp cho mọi tài khoản ngân hàng và mạng xã hội.'
+      }
+    ];
+    let currentLab8Slide = 0;
+
+    function renderLab8Slide() {
+      const s = lab8Slides[currentLab8Slide];
+      document.getElementById('l8-slide-indicator').textContent = `Slide ${currentLab8Slide + 1} / ${lab8Slides.length}`;
+      document.getElementById('l8-slide-stage').innerHTML = `
+        <div class="space-y-2">
+          <span class="px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[11px] font-bold">${s.tag}</span>
+          <h4 class="font-serif text-xl sm:text-2xl font-bold text-white">${s.title}</h4>
+          <p class="text-xs sm:text-sm text-emerald-100/90 leading-relaxed pt-1">${s.body}</p>
+        </div>
+        <div class="pt-4 border-t border-emerald-400/15 flex justify-between text-[11px] text-emerald-300/70">
+          <span>FPT Polytechnic • CNTT 4.0</span>
+          <span>PK04952 - Phó Minh Quốc Knul</span>
+        </div>
+      `;
+    }
+
+    function changeLab8Slide(step) {
+      currentLab8Slide = (currentLab8Slide + step + lab8Slides.length) % lab8Slides.length;
+      renderLab8Slide();
+    }
+
+    const lab8QuizData = [
+      {
+        q: '1. Nghị định nào của Chính phủ Việt Nam quy định về Bảo vệ dữ liệu cá nhân?',
+        options: ['Nghị định 13/2023/NĐ-CP', 'Nghị định 100/2019/NĐ-CP', 'Nghị định 45/2021/NĐ-CP'],
+        ans: 0
+      },
+      {
+        q: '2. Dấu hiệu nào thường gặp ở cuộc gọi video giả mạo bằng Deepfake?',
+        options: ['Độ phân giải 8K siêu nét', 'Khẩu hình môi lệch nhịp và viền mặt bị nhòe', 'Thời lượng cuộc gọi kéo dài 2 tiếng'],
+        ans: 1
+      },
+      {
+        q: '3. Cách xử lý an toàn nhất khi người thân gọi video mượn tiền gấp?',
+        options: ['Chuyển tiền ngay lập tức', 'Gửi mã OTP để kiểm tra', 'Gọi lại bằng số điện thoại thường để xác minh'],
+        ans: 2
+      }
+    ];
+
+    function renderLab8Quiz() {
+      const container = document.getElementById('lab8-quiz-container');
+      container.innerHTML = lab8QuizData.map((item, idx) => `
+        <div class="p-2.5 rounded-xl bg-black/30 border border-emerald-400/15 space-y-1">
+          <div class="font-semibold text-emerald-200">${item.q}</div>
+          ${item.options.map((opt, oIdx) => `
+            <label class="flex items-center gap-2 text-emerald-100/85 cursor-pointer">
+              <input type="radio" name="l8q_${idx}" value="${oIdx}" class="accent-emerald-400" />
+              <span>${opt}</span>
+            </label>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    function gradeLab8Quiz() {
+      let score = 0;
+      lab8QuizData.forEach((item, idx) => {
+        const picked = document.querySelector(`input[name="l8q_${idx}"]:checked`);
+        if (picked && parseInt(picked.value, 10) === item.ans) score++;
+      });
+      document.getElementById('lab8-quiz-score').textContent = `Kết quả: ${score}/${lab8QuizData.length} câu đúng!`;
+      showToast(`Bạn trả lời đúng ${score}/${lab8QuizData.length} câu hỏi An toàn thông tin!`);
+    }
+
+    // Toast helper
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+    }
+
+    // Khởi tạo toàn trang
+    window.addEventListener('DOMContentLoaded', () => {
+      initFireflies();
+      renderAnimals('ALL');
+      renderLabOverviewCards();
+      renderTaskManager();
+      loadLab7Notes();
+      renderLab8Slide();
+      renderLab8Quiz();
+    });
+  </script>
+</body>
+</html>
